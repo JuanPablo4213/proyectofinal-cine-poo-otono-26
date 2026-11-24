@@ -1,0 +1,38 @@
+@startuml actividad_comprar_boletos
+title Actividades 2 - Comprar boletos
+start
+:Seleccionar una función;
+if (¿Sesión iniciada?) then (no)
+  repeat
+    :Iniciar sesión o registrarse;
+  repeat while (¿Datos correctos?) is (no) not (sí)
+endif
+:Crear compra PENDIENTE (ServicioCompras.iniciarCompra);
+repeat
+  :Mostrar mapa de asientos (POJOFuncion.getAsientosDisponibles);
+  repeat
+    :Elegir asiento y tipo de boleto;
+    if (¿Asiento disponible?) then (sí)
+      :Calcular precio (POJOSala.calcularPrecio)\ny agregar boleto a la compra;
+    else (no)
+      :Mostrar "Asiento ocupado";
+    endif
+  repeat while (¿Agregar otro boleto? (máx. 10)) is (sí) not (no)
+  :Mostrar resumen y total;
+  repeat
+    :Elegir método de pago y capturar datos;
+    if (¿Pago válido?) then (no)
+      :Mostrar error de pago;
+      if (¿Reintentar?) then (no)
+        :Compra se queda sin pagar (no se ocupa ningún asiento);
+        stop
+      endif
+    endif
+  repeat while (¿Pago válido?) is (no) not (sí)
+  backward:Avisar: otro cliente compró un asiento;
+repeat while (¿Los asientos siguen libres?) is (no) not (sí)
+:Ocupar asientos en la función (POJOFuncion.ocupar);
+:Cambiar compra a PAGADA;
+:Mostrar confirmación y boletos;
+stop
+@enduml

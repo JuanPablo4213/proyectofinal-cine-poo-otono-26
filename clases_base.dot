@@ -1,0 +1,9 @@
+digraph G {
+graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagrama de clases – módulo cinemex.base", labelloc=t, fontsize=18, pad=0.3];
+node [shape=plain, fontname="Helvetica", fontsize=10];
+edge [fontname="Helvetica", fontsize=9];
+"App" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#ECEFF1"><B>App</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ main(args: String[]): void {static}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"IMenu" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#ECEFF1"><FONT POINT-SIZE="9">«interface»</FONT><BR/><B><I>IMenu</I></B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ getTitulo(): String<BR ALIGN="LEFT"/>+ mostrar(sc: Scanner): void<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"ConexionBD" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#ECEFF1"><B>ConexionBD</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- conexion: Connection {static}<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ obtener(): Connection {static}<BR ALIGN="LEFT"/>+ ejecutar(sql: String, params: Object...): ResultSet {static}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"App" -> "IMenu" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="lista de menús"];
+}

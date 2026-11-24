@@ -1,0 +1,347 @@
+@startuml clases_cinemex
+title Diagrama de clases - Clon de Cinemex
+skinparam classAttributeIconSize 0
+left to right direction
+
+package cinemex.base {
+  class App {
+    + main(args: String[]): void {static}
+  }
+  interface IMenu {
+    + getTitulo(): String
+    + mostrar(sc: Scanner): void
+  }
+  class ConexionBD {
+    - conexion: Connection {static}
+    + obtener(): Connection {static}
+    + ejecutar(sql: String, params: Object...): ResultSet {static}
+  }
+}
+package cinemex.usuarios {
+  abstract class POJOUsuario {
+    # id: int
+    # nombre: String
+    # email: String
+    # password: String
+    + POJOUsuario(id, nombre, email, password)
+    + getRol(): String {abstract}
+    + validarPassword(password: String): boolean
+    + getId(): int
+    + getNombre(): String
+    + getEmail(): String
+    + toString(): String
+  }
+  class POJOCliente {
+    - _telefono: String
+    + POJOCliente(id, nombre, email, password, telefono)
+    + getRol(): String
+    + getTelefono(): String
+  }
+  class POJOAdministrador {
+    - _numEmpleado: String
+    + POJOAdministrador(id, nombre, email, password, numEmpleado)
+    + getRol(): String
+  }
+  class ServicioUsuarios {
+    - _usuarios: List<POJOUsuario>
+    - _usuarioActual: POJOUsuario
+    + guardar(obj: POJOUsuario): boolean
+    + buscarPorId(id: int): POJOUsuario
+    + buscarPorEmail(email: String): POJOUsuario
+    + listar(): List<POJOUsuario>
+    + iniciarSesion(email: String, password: String): POJOUsuario
+    + cerrarSesion(): void
+    + getUsuarioActual(): POJOUsuario
+    + esAdministrador(): boolean
+  }
+  class MenuUsuarios {
+    - _servicio: ServicioUsuarios
+    + getTitulo(): String
+    + mostrar(sc: Scanner): void
+    - registrarCliente(sc: Scanner): void
+    - iniciarSesion(sc: Scanner): void
+    - cerrarSesion(): void
+  }
+}
+package cinemex.peliculas {
+  enum Clasificacion {
+    AA
+    A
+    B
+    B15
+    C
+    D
+  }
+  class POJOPelicula {
+    - _id: int
+    - _titulo: String
+    - _sinopsis: String
+    - _genero: String
+    - _director: String
+    - _duracionMin: int
+    - _clasificacion: Clasificacion
+    - _enCartelera: boolean
+    + POJOPelicula(id, titulo, sinopsis, genero, director, duracionMin, clasificacion)
+    + getters()
+    + setEnCartelera(valor: boolean): void
+    + toString(): String
+  }
+  interface IFiltroPelicula {
+    + cumple(p: POJOPelicula): boolean
+  }
+  class FiltroTitulo {
+    - _texto: String
+    + cumple(p: POJOPelicula): boolean
+  }
+  class FiltroGenero {
+    - _genero: String
+    + cumple(p: POJOPelicula): boolean
+  }
+  class FiltroClasificacion {
+    - _clasificacion: Clasificacion
+    + cumple(p: POJOPelicula): boolean
+  }
+  class ServicioPeliculas {
+    - _peliculas: List<POJOPelicula>
+    + guardar(obj: POJOPelicula): boolean
+    + buscarPorId(id: int): POJOPelicula
+    + listar(): List<POJOPelicula>
+    + listarCartelera(): List<POJOPelicula>
+    + buscar(filtros: List<IFiltroPelicula>): List<POJOPelicula>
+  }
+  class MenuPeliculas {
+    - _servicio: ServicioPeliculas
+    - _usuarios: ServicioUsuarios
+    + getTitulo(): String
+    + mostrar(sc: Scanner): void
+    - verCartelera(): void
+    - buscarPelicula(sc: Scanner): void
+    - verDetalle(sc: Scanner): void
+    - agregarPelicula(sc: Scanner): void
+  }
+}
+package cinemex.cines {
+  class POJOCine {
+    - _id: int
+    - _nombre: String
+    - _ciudad: String
+    - _direccion: String
+    - _salas: List<POJOSala>
+    + POJOCine(id, nombre, ciudad, direccion)
+    + agregarSala(s: POJOSala): boolean
+    + tieneSala(s: POJOSala): boolean
+    + getSalas(): List<POJOSala>
+    + getters()
+  }
+  abstract class POJOSala {
+    # id: int
+    # numero: int
+    # filas: int
+    # columnas: int
+    # asientos: List<POJOAsiento>
+    + POJOSala(id, numero, filas, columnas)
+    + calcularPrecio(tipo: TipoBoleto): double {abstract}
+    + getTipoSala(): String {abstract}
+    + buscarAsiento(fila: char, numero: int): POJOAsiento
+    + getCapacidad(): int
+    + getAsientos(): List<POJOAsiento>
+  }
+  class POJOSalaTradicional {
+    - PRECIO_BASE: double = 75 {static}
+    + calcularPrecio(tipo: TipoBoleto): double
+    + getTipoSala(): String
+  }
+  class POJOSalaPlatino {
+    - PRECIO_BASE: double = 160 {static}
+    + calcularPrecio(tipo: TipoBoleto): double
+    + getTipoSala(): String
+  }
+  class POJOSalaX4D {
+    - PRECIO_BASE: double = 120 {static}
+    - _cargoEfectos: double
+    + calcularPrecio(tipo: TipoBoleto): double
+    + getTipoSala(): String
+  }
+  class POJOAsiento {
+    - _id: int
+    - _fila: char
+    - _numero: int
+    + POJOAsiento(id, fila, numero)
+    + getCodigo(): String
+    + getFila(): char
+    + getNumero(): int
+  }
+  class ServicioCines {
+    - _cines: List<POJOCine>
+    + guardar(obj: POJOCine): boolean
+    + buscarPorId(id: int): POJOCine
+    + listar(): List<POJOCine>
+    + listarPorCiudad(ciudad: String): List<POJOCine>
+  }
+  class MenuCines {
+    - _servicio: ServicioCines
+    - _usuarios: ServicioUsuarios
+    + getTitulo(): String
+    + mostrar(sc: Scanner): void
+    - listarCines(sc: Scanner): void
+    - agregarCine(sc: Scanner): void
+    - agregarSala(sc: Scanner): void
+  }
+}
+package cinemex.funciones {
+  enum Idioma {
+    ESPANOL
+    SUBTITULADA
+  }
+  class POJOFuncion {
+    - _id: int
+    - _pelicula: POJOPelicula
+    - _sala: POJOSala
+    - _fechaHora: LocalDateTime
+    - _idioma: Idioma
+    - _asientosOcupados: List<POJOAsiento>
+    + POJOFuncion(id, pelicula, sala, fechaHora, idioma)
+    + estaDisponible(a: POJOAsiento): boolean
+    + ocupar(a: POJOAsiento): boolean
+    + liberar(a: POJOAsiento): void
+    + getAsientosDisponibles(): List<POJOAsiento>
+    + calcularHoraFin(): LocalDateTime
+    + getters()
+  }
+  class ServicioFunciones {
+    - _funciones: List<POJOFuncion>
+    + guardar(obj: POJOFuncion): boolean
+    + buscarPorId(id: int): POJOFuncion
+    + listar(): List<POJOFuncion>
+    + listarPorPelicula(p: POJOPelicula): List<POJOFuncion>
+    + listarPorCineYPelicula(c: POJOCine, p: POJOPelicula, dia: LocalDate): List<POJOFuncion>
+  }
+  class MenuFunciones {
+    - _servicio: ServicioFunciones
+    - _peliculas: ServicioPeliculas
+    - _cines: ServicioCines
+    - _usuarios: ServicioUsuarios
+    + getTitulo(): String
+    + mostrar(sc: Scanner): void
+    - verHorarios(sc: Scanner): void
+    - verAsientos(sc: Scanner): void
+    - programarFuncion(sc: Scanner): void
+  }
+}
+package cinemex.compras {
+  enum TipoBoleto {
+    ADULTO
+    NINO
+    ADULTO_MAYOR
+  }
+  enum EstadoCompra {
+    PENDIENTE
+    PAGADA
+    CANCELADA
+  }
+  class POJOBoleto {
+    - _id: int
+    - _funcion: POJOFuncion
+    - _asiento: POJOAsiento
+    - _tipo: TipoBoleto
+    - _precio: double
+    + POJOBoleto(id, funcion, asiento, tipo, precio)
+    + getters()
+    + toString(): String
+  }
+  class POJOCompra {
+    - _id: int
+    - _cliente: POJOCliente
+    - _funcion: POJOFuncion
+    - _boletos: List<POJOBoleto>
+    - _metodo: IMetodoPago
+    - _estado: EstadoCompra
+    - _fecha: LocalDateTime
+    + POJOCompra(id, cliente, funcion)
+    + agregarBoleto(b: POJOBoleto): boolean
+    + tieneAsiento(a: POJOAsiento): boolean
+    + calcularTotal(): double
+    + setMetodo(m: IMetodoPago): void
+    + setEstado(e: EstadoCompra): void
+    + getters()
+  }
+  interface IMetodoPago {
+    + validar(): boolean
+    + calcularComision(monto: double): double
+  }
+  class PagoTarjeta {
+    - _numeroTarjeta: String
+    - _cvv: String
+    + validar(): boolean
+    + calcularComision(monto: double): double
+  }
+  class PagoPayPal {
+    - _correo: String
+    + validar(): boolean
+    + calcularComision(monto: double): double
+  }
+  class ServicioCompras {
+    - _compras: List<POJOCompra>
+    - MAX_BOLETOS: int = 10 {static}
+    + iniciarCompra(c: POJOCliente, f: POJOFuncion): POJOCompra
+    + agregarBoleto(compra: POJOCompra, a: POJOAsiento, tipo: TipoBoleto): boolean
+    + confirmarCompra(compra: POJOCompra, m: IMetodoPago): boolean
+    + cancelar(id: int): boolean
+    + buscarPorId(id: int): POJOCompra
+    + listarPorCliente(c: POJOCliente): List<POJOCompra>
+  }
+  class MenuCompras {
+    - _servicio: ServicioCompras
+    - _funciones: ServicioFunciones
+    - _usuarios: ServicioUsuarios
+    + getTitulo(): String
+    + mostrar(sc: Scanner): void
+    - comprarBoletos(sc: Scanner): void
+    - verMisCompras(): void
+    - cancelarCompra(sc: Scanner): void
+  }
+}
+
+POJOUsuario <|-- POJOCliente
+POJOUsuario <|-- POJOAdministrador
+POJOSala <|-- POJOSalaTradicional
+POJOSala <|-- POJOSalaPlatino
+POJOSala <|-- POJOSalaX4D
+IFiltroPelicula <|.. FiltroTitulo
+IFiltroPelicula <|.. FiltroGenero
+IFiltroPelicula <|.. FiltroClasificacion
+IMetodoPago <|.. PagoTarjeta
+IMetodoPago <|.. PagoPayPal
+IMenu <|.. MenuUsuarios
+IMenu <|.. MenuPeliculas
+IMenu <|.. MenuCines
+IMenu <|.. MenuFunciones
+IMenu <|.. MenuCompras
+POJOCine "1" *-- "1..*" POJOSala : tiene
+POJOSala "1" *-- "1..*" POJOAsiento : tiene
+POJOFuncion "0..*" --> "1" POJOPelicula : proyecta
+POJOFuncion "0..*" --> "1" POJOSala : se da en
+POJOFuncion --> "0..*" POJOAsiento : ocupados
+POJOPelicula --> "1" Clasificacion
+POJOFuncion --> "1" Idioma
+POJOCompra "1" *-- "1..10" POJOBoleto : incluye
+POJOCompra "0..*" --> "1" POJOCliente : realiza
+POJOCompra "0..*" --> "1" POJOFuncion : para
+POJOCompra --> "0..1" IMetodoPago : se paga con
+POJOCompra --> "1" EstadoCompra
+POJOBoleto "0..*" --> "1" POJOAsiento : para
+POJOBoleto --> "1" TipoBoleto
+POJOSala ..> TipoBoleto : usa
+ServicioUsuarios "1" o-- "0..*" POJOUsuario : administra
+ServicioPeliculas "1" o-- "0..*" POJOPelicula : administra
+ServicioPeliculas ..> IFiltroPelicula : usa
+ServicioCines "1" o-- "0..*" POJOCine : administra
+ServicioFunciones "1" o-- "0..*" POJOFuncion : administra
+ServicioCompras "1" o-- "0..*" POJOCompra : administra
+MenuUsuarios ..> ServicioUsuarios : usa
+MenuPeliculas ..> ServicioPeliculas : usa
+MenuCines ..> ServicioCines : usa
+MenuFunciones ..> ServicioFunciones : usa
+MenuCompras ..> ServicioCompras : usa
+App ..> IMenu : lista de menús
+@enduml

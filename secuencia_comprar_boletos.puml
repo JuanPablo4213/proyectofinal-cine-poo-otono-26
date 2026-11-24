@@ -1,0 +1,55 @@
+@startuml secuencia_comprar_boletos
+title Diagrama de secuencia - Comprar boletos
+actor Cliente as cli
+participant ":MenuCompras" as menu
+participant ":ServicioUsuarios" as su
+participant ":ServicioFunciones" as sf
+participant ":ServicioCompras" as sc
+participant "f:POJOFuncion" as f
+participant "s:POJOSala" as s
+participant "c:POJOCompra" as c
+participant "m:PagoTarjeta\n«IMetodoPago»" as m
+cli -> menu : 1: elige "Comprar boletos" (idFuncion)
+menu -> su : 2: getUsuarioActual()
+su --> menu : cliente: POJOCliente
+menu -> sf : 3: buscarPorId(idFuncion)
+sf --> menu : f: POJOFuncion
+menu -> sc : 4: iniciarCompra(cliente, f)
+sc --> c : 4.1: «create» POJOCompra(id, cliente, f)
+sc --> menu : c (estado PENDIENTE)
+menu -> f : 5: getAsientosDisponibles()
+f --> menu : List<POJOAsiento>
+menu --> cli : 6: muestra mapa de asientos
+loop por cada boleto, máx. 10
+cli -> menu : 7: asiento "F7", tipo ADULTO
+menu -> s : 8: f.getSala().buscarAsiento('F', 7)
+s --> menu : a: POJOAsiento
+menu -> sc : 9: agregarBoleto(c, a, ADULTO)
+sc -> f : 9.1: estaDisponible(a)
+f --> sc : true
+sc -> s : 9.2: calcularPrecio(ADULTO)
+s --> sc : precio
+sc -> c : 9.3: agregarBoleto(new POJOBoleto(...))
+c --> sc : true
+sc --> menu : true
+end
+cli -> menu : 10: datos de la tarjeta
+menu --> m : 10.1: «create» PagoTarjeta(numero, cvv)
+menu -> sc : 11: confirmarCompra(c, m)
+sc -> m : 11.1: validar()
+m --> sc : true
+loop por cada boleto de c
+sc -> f : 11.2: estaDisponible(asiento)
+f --> sc : true
+end
+sc -> c : 11.3: calcularTotal()
+c --> sc : total
+sc -> m : 11.4: calcularComision(total)
+m --> sc : comision
+loop por cada boleto de c
+sc -> f : 11.5: ocupar(asiento)
+end
+sc -> c : 11.6: setMetodo(m); setEstado(PAGADA)
+sc --> menu : true
+menu --> cli : 12: muestra confirmación y boletos
+@enduml

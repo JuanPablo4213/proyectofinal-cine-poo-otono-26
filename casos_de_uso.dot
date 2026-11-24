@@ -1,0 +1,48 @@
+digraph CU {
+graph [rankdir=LR, nodesep=0.25, ranksep=1.4, fontname="Helvetica", label="Diagrama de casos de uso – Clon de Cinemex", labelloc=t, fontsize=20, pad=0.3];
+node [fontname="Helvetica", fontsize=11];
+edge [arrowhead=none, fontname="Helvetica", fontsize=10];
+"Visitante" [shape=box, style="rounded,filled", fillcolor="#FFF8E1", label="«actor»\nVisitante", width=1.6];
+"Cliente registrado" [shape=box, style="rounded,filled", fillcolor="#FFF8E1", label="«actor»\nCliente registrado", width=1.6];
+"Administrador" [shape=box, style="rounded,filled", fillcolor="#FFF8E1", label="«actor»\nAdministrador", width=1.6];
+subgraph cluster_sis { label="Sistema Cinemex (clon)"; style=rounded; color="#455A64"; fontsize=14;
+"CU01 Consultar cartelera" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Consultar cartelera\n(CU01)"];
+"CU02 Buscar película" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Buscar película\n(CU02)"];
+"CU03 Ver detalle de película" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Ver detalle de película\n(CU03)"];
+"CU04 Seleccionar cine" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Seleccionar cine\n(CU04)"];
+"CU05 Consultar horarios de funciones" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Consultar horarios de funciones\n(CU05)"];
+"CU06 Ver asientos disponibles" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Ver asientos disponibles\n(CU06)"];
+"CU07 Registrarse" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Registrarse\n(CU07)"];
+"CU08 Iniciar sesión" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Iniciar sesión\n(CU08)"];
+"CU09 Comprar boletos" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Comprar boletos\n(CU09)"];
+"CU10 Seleccionar asientos" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Seleccionar asientos\n(CU10)"];
+"CU11 Pagar compra" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Pagar compra\n(CU11)"];
+"CU12 Consultar mis compras" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Consultar mis compras\n(CU12)"];
+"CU13 Cancelar compra" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Cancelar compra\n(CU13)"];
+"CU14 Cerrar sesión" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Cerrar sesión\n(CU14)"];
+"CU15 Gestionar películas" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Gestionar películas\n(CU15)"];
+"CU16 Gestionar cines y salas" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Gestionar cines y salas\n(CU16)"];
+"CU17 Programar funciones" [shape=ellipse, style=filled, fillcolor="#E3F2FD", label="Programar funciones\n(CU17)"];
+}
+"Cliente registrado" -> "Visitante" [arrowhead=empty, constraint=false, label=" hereda"];
+"Visitante" -> "CU01 Consultar cartelera";
+"Visitante" -> "CU02 Buscar película";
+"Visitante" -> "CU03 Ver detalle de película";
+"Visitante" -> "CU04 Seleccionar cine";
+"Visitante" -> "CU05 Consultar horarios de funciones";
+"Visitante" -> "CU06 Ver asientos disponibles";
+"Visitante" -> "CU07 Registrarse";
+"Visitante" -> "CU08 Iniciar sesión";
+"Cliente registrado" -> "CU09 Comprar boletos";
+"Cliente registrado" -> "CU10 Seleccionar asientos";
+"Cliente registrado" -> "CU11 Pagar compra";
+"Cliente registrado" -> "CU12 Consultar mis compras";
+"Cliente registrado" -> "CU13 Cancelar compra";
+"Cliente registrado" -> "CU14 Cerrar sesión";
+"Administrador" -> "CU15 Gestionar películas";
+"Administrador" -> "CU16 Gestionar cines y salas";
+"Administrador" -> "CU17 Programar funciones";
+"Administrador" -> "CU08 Iniciar sesión";
+"Administrador" -> "CU14 Cerrar sesión";
+{rank=same; "Visitante"; "Cliente registrado"; "Administrador";}
+}

@@ -1,0 +1,28 @@
+@startuml actividad_consultar_pelicula
+title Actividades 1 - Consultar una película y encontrar una función
+start
+:Abrir la cartelera;
+:Mostrar películas en cartelera\n(ServicioPeliculas.listarCartelera);
+if (¿Buscar por filtro?) then (sí)
+  repeat
+    :Escribir título / género / clasificación;
+    :Aplicar filtros (ServicioPeliculas.buscar);
+    backward:Mostrar "No se encontraron películas";
+  repeat while (¿Hay resultados?) is (no) not (sí)
+endif
+:Seleccionar una película;
+:Mostrar detalle (sinopsis, duración, clasificación, género);
+repeat
+  :Seleccionar ciudad y cine;
+  :Seleccionar día;
+  :Buscar funciones\n(ServicioFunciones.listarPorCineYPelicula);
+  if (¿Hay funciones?) then (sí)
+    :Mostrar horarios con sala e idioma;
+    :Seleccionar una función;
+    stop
+  else (no)
+    :Avisar que no hay funciones ese día en ese cine;
+  endif
+repeat while (¿Probar otro cine/día?) is (sí) not (no)
+stop
+@enduml

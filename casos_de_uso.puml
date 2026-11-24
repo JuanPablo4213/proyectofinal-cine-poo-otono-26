@@ -1,0 +1,46 @@
+@startuml casos_de_uso
+title Diagrama de casos de uso - Clon de Cinemex
+left to right direction
+actor Visitante
+actor "Cliente registrado" as Cliente
+actor Administrador
+Cliente --|> Visitante
+rectangle "Sistema Cinemex (clon)" {
+  usecase "CU01 Consultar cartelera" as CU01
+  usecase "CU02 Buscar película" as CU02
+  usecase "CU03 Ver detalle de película" as CU03
+  usecase "CU04 Seleccionar cine" as CU04
+  usecase "CU05 Consultar horarios" as CU05
+  usecase "CU06 Ver asientos disponibles" as CU06
+  usecase "CU07 Registrarse" as CU07
+  usecase "CU08 Iniciar sesión" as CU08
+  usecase "CU09 Comprar boletos" as CU09
+  usecase "CU10 Seleccionar asientos" as CU10
+  usecase "CU11 Pagar compra" as CU11
+  usecase "CU12 Consultar mis compras" as CU12
+  usecase "CU13 Cancelar compra" as CU13
+  usecase "CU14 Cerrar sesión" as CU14
+  usecase "CU15 Gestionar películas" as CU15
+  usecase "CU16 Gestionar cines y salas" as CU16
+  usecase "CU17 Programar funciones" as CU17
+}
+Visitante --> CU01
+Visitante --> CU02
+Visitante --> CU03
+Visitante --> CU04
+Visitante --> CU05
+Visitante --> CU06
+Visitante --> CU07
+Visitante --> CU08
+Cliente --> CU09
+Cliente --> CU10
+Cliente --> CU11
+Cliente --> CU12
+Cliente --> CU13
+Cliente --> CU14
+Administrador --> CU08
+Administrador --> CU14
+Administrador --> CU15
+Administrador --> CU16
+Administrador --> CU17
+@enduml
