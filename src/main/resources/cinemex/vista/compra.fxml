@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cinemex.controlador.CompraControlador" fitToWidth="true">
+    <VBox spacing="16">
+        <padding><Insets top="18" right="28" bottom="24" left="28"/></padding>
+        <HBox spacing="18" alignment="CENTER_LEFT">
+            <Button text="← Regresar" onAction="#regresar" styleClass="boton-secundario"/>
+            <StackPane fx:id="contPoster"/>
+            <VBox spacing="6">
+                <Label fx:id="lblTitulo" styleClass="titulo-pantalla"/>
+                <Label fx:id="lblFuncion" styleClass="texto-suave"/>
+            </VBox>
+        </HBox>
+        <HBox spacing="24">
+            <!-- Mapa de asientos -->
+            <VBox spacing="12" styleClass="panel" HBox.hgrow="ALWAYS" alignment="TOP_CENTER">
+                <Label text="Selecciona tus asientos" styleClass="subtitulo"/>
+                <VBox alignment="CENTER" spacing="4">
+                    <Region styleClass="pantalla-cine" prefWidth="420"/>
+                    <Label text="P A N T A L L A" styleClass="texto-suave"/>
+                </VBox>
+                <GridPane fx:id="mapa" hgap="5" vgap="6"/>
+                <HBox spacing="18" alignment="CENTER">
+                    <HBox spacing="6" alignment="CENTER"><Region styleClass="leyenda-libre"/><Label text="Disponible"/></HBox>
+                    <HBox spacing="6" alignment="CENTER"><Region styleClass="leyenda-seleccionado"/><Label text="Tu selección"/></HBox>
+                    <HBox spacing="6" alignment="CENTER"><Region styleClass="leyenda-ocupado"/><Label text="Ocupado"/></HBox>
+                </HBox>
+            </VBox>
+            <!-- Boletos y pago -->
+            <VBox spacing="12" styleClass="panel" prefWidth="360" minWidth="340">
+                <Label text="Tus boletos" styleClass="subtitulo"/>
+                <Label fx:id="lblSeleccion" wrapText="true" styleClass="texto-suave"/>
+                <GridPane hgap="12" vgap="10">
+                    <Label text="Adulto" GridPane.rowIndex="0"/>
+                    <Label fx:id="lblPrecioAdulto" styleClass="texto-suave" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <Spinner fx:id="spAdulto" prefWidth="80" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <Label text="Niño" GridPane.rowIndex="1"/>
+                    <Label fx:id="lblPrecioNino" styleClass="texto-suave" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Spinner fx:id="spNino" prefWidth="80" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                    <Label text="Adulto mayor" GridPane.rowIndex="2"/>
+                    <Label fx:id="lblPrecioMayor" styleClass="texto-suave" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <Spinner fx:id="spMayor" prefWidth="80" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                </GridPane>
+                <Label fx:id="lblTotal" text="Total: $0.00" styleClass="total"/>
+                <Label fx:id="lblAviso" styleClass="mensaje-error" wrapText="true"/>
+                <Separator/>
+                <Label text="Método de pago" styleClass="subtitulo"/>
+                <HBox spacing="16">
+                    <RadioButton fx:id="rbTarjeta" text="Tarjeta"/>
+                    <RadioButton fx:id="rbPayPal" text="PayPal (+3.5%)"/>
+                </HBox>
+                <VBox fx:id="panelTarjeta" spacing="8">
+                    <TextField fx:id="txtTarjeta" promptText="Número de tarjeta (16 dígitos)"/>
+                    <TextField fx:id="txtCvv" promptText="CVV" maxWidth="90"/>
+                    <Label text="Pago simulado: no se hace ningún cargo real." styleClass="texto-suave" wrapText="true"/>
+                </VBox>
+                <VBox fx:id="panelPayPal" spacing="8">
+                    <TextField fx:id="txtCorreoPayPal" promptText="Correo de PayPal"/>
+                </VBox>
+                <Button fx:id="btnPagar" text="Pagar" onAction="#pagar" styleClass="boton-primario" maxWidth="Infinity"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</ScrollPane>

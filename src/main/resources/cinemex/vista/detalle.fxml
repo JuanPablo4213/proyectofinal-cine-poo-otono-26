@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cinemex.controlador.DetalleControlador" fitToWidth="true">
+    <VBox spacing="18">
+        <padding><Insets top="18" right="32" bottom="28" left="32"/></padding>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Button text="← Regresar" onAction="#regresar" styleClass="boton-secundario"/>
+            <ProgressIndicator fx:id="progreso" prefWidth="24" prefHeight="24" visible="false"/>
+        </HBox>
+        <HBox spacing="32">
+            <StackPane fx:id="contPoster" prefWidth="300" prefHeight="450"/>
+            <VBox spacing="14" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblTitulo" text="Cargando..." styleClass="titulo-pantalla" wrapText="true"/>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <Label fx:id="lblClasificacion" styleClass="chip-clasificacion"/>
+                    <Label fx:id="lblDatos" styleClass="texto-suave"/>
+                </HBox>
+                <Label fx:id="lblGeneros" styleClass="chip"/>
+                <Label text="Sinopsis" styleClass="subtitulo"/>
+                <Label fx:id="lblSinopsis" wrapText="true" maxWidth="720"/>
+                <Label fx:id="lblEstado" styleClass="mensaje" wrapText="true"/>
+                <Button fx:id="btnImportar" text="Importar a mi cine" onAction="#importar" styleClass="boton-primario"/>
+            </VBox>
+        </HBox>
+        <VBox fx:id="panelFunciones" spacing="10" styleClass="panel">
+            <Label text="Funciones en nuestros cines" styleClass="subtitulo"/>
+            <TableView fx:id="tablaFunciones" prefHeight="220">
+                <placeholder><Label text="No hay funciones programadas para esta película."/></placeholder>
+            </TableView>
+            <HBox alignment="CENTER_RIGHT">
+                <Button text="Comprar boletos" onAction="#comprar" styleClass="boton-primario"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</ScrollPane>

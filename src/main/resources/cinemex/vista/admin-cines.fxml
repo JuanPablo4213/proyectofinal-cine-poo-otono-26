@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cinemex.controlador.AdminCinesControlador" spacing="14">
+    <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+    <Label text="Administración · Cines y salas" styleClass="titulo-pantalla"/>
+    <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <!-- Cines -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="panel">
+            <Label text="Cines" styleClass="subtitulo"/>
+            <TableView fx:id="tablaCines" VBox.vgrow="ALWAYS"/>
+            <GridPane hgap="10" vgap="8">
+                <columnConstraints><ColumnConstraints minWidth="70"/><ColumnConstraints hgrow="ALWAYS"/></columnConstraints>
+                <Label text="Nombre" GridPane.rowIndex="0"/>
+                <TextField fx:id="txtNombre" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="Ciudad" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtCiudad" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="Dirección" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtDireccion" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            </GridPane>
+            <HBox spacing="10">
+                <Button text="Nuevo" onAction="#nuevoCine" styleClass="boton-secundario"/>
+                <Button text="Guardar" onAction="#guardarCine" styleClass="boton-primario"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Eliminar cine" onAction="#eliminarCine" styleClass="boton-peligro"/>
+            </HBox>
+        </VBox>
+        <!-- Salas del cine seleccionado -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="panel">
+            <Label fx:id="lblSalas" text="Salas (selecciona un cine)" styleClass="subtitulo"/>
+            <TableView fx:id="tablaSalas" VBox.vgrow="ALWAYS"/>
+            <GridPane hgap="10" vgap="8">
+                <Label text="Número" GridPane.rowIndex="0"/>
+                <TextField fx:id="txtNumero" prefWidth="70" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="Tipo" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                <ComboBox fx:id="cmbTipo" prefWidth="140" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                <Label text="Filas" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtFilas" text="8" prefWidth="70" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="Columnas" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtColumnas" text="12" prefWidth="70" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                <Label text="Cargo X4D" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtCargo" text="35" prefWidth="70" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            </GridPane>
+            <HBox spacing="10">
+                <Button text="Agregar sala" onAction="#agregarSala" styleClass="boton-primario"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Eliminar sala" onAction="#eliminarSala" styleClass="boton-peligro"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>

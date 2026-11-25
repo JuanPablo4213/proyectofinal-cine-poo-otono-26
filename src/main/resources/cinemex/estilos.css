@@ -1,0 +1,91 @@
+/* Estilos inspirados en cinemex.com: fondo oscuro y acento rojo */
+.root {
+    -fx-font-family: "Helvetica Neue", "Segoe UI", "DejaVu Sans", sans-serif;
+    -fx-font-size: 13px;
+    -rojo: #e4002b;
+    -oscuro: #111111;
+    -gris: #1c1c1e;
+    -gris-claro: #2c2c2e;
+    -texto: #f2f2f2;
+    -texto-suave: #a1a1a6;
+    -fx-background-color: -oscuro;
+}
+
+.raiz, .contenido { -fx-background-color: -oscuro; }
+
+/* ---------- barra de navegación ---------- */
+.barra { -fx-background-color: #000000; -fx-padding: 10 20; -fx-border-color: transparent transparent -rojo transparent; -fx-border-width: 0 0 2 0; }
+.logo { -fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold; -fx-padding: 0 18 0 0; -fx-cursor: hand; }
+.boton-barra { -fx-background-color: transparent; -fx-text-fill: -texto; -fx-font-size: 14px; -fx-cursor: hand; }
+.boton-barra:hover { -fx-text-fill: -rojo; }
+.boton-barra .arrow { -fx-background-color: -texto; }
+.usuario { -fx-text-fill: -texto-suave; -fx-padding: 0 10 0 0; }
+
+/* ---------- botones ---------- */
+.button { -fx-background-radius: 6; -fx-cursor: hand; }
+.boton-primario { -fx-background-color: -rojo; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; }
+.boton-primario:hover { -fx-background-color: #ff1a45; }
+.boton-primario:disabled { -fx-opacity: 0.4; }
+.boton-secundario { -fx-background-color: -gris-claro; -fx-text-fill: -texto; -fx-padding: 8 16; }
+.boton-secundario:hover { -fx-background-color: #3a3a3c; }
+.boton-peligro { -fx-background-color: transparent; -fx-border-color: -rojo; -fx-border-radius: 6; -fx-text-fill: -rojo; -fx-padding: 7 15; }
+
+.toggle-button { -fx-background-color: -gris-claro; -fx-text-fill: -texto; -fx-background-radius: 18; -fx-padding: 8 18; -fx-cursor: hand; }
+.toggle-button:selected { -fx-background-color: -rojo; -fx-text-fill: white; -fx-font-weight: bold; }
+
+/* ---------- textos ---------- */
+.label { -fx-text-fill: -texto; }
+.titulo-pantalla { -fx-font-size: 26px; -fx-font-weight: bold; }
+.subtitulo { -fx-font-size: 17px; -fx-font-weight: bold; }
+.texto-suave { -fx-text-fill: -texto-suave; }
+.mensaje { -fx-text-fill: -texto-suave; -fx-font-size: 15px; }
+.mensaje-error { -fx-text-fill: #ff6b6b; -fx-font-size: 14px; }
+.chip { -fx-background-color: -gris-claro; -fx-background-radius: 12; -fx-padding: 3 10; -fx-text-fill: -texto; }
+.chip-clasificacion { -fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 3 9; -fx-background-radius: 4; }
+
+/* ---------- campos ---------- */
+.text-field, .password-field, .combo-box, .date-picker, .spinner {
+    -fx-background-color: -gris-claro; -fx-text-fill: -texto; -fx-prompt-text-fill: #77777c;
+    -fx-background-radius: 6; -fx-border-color: #3a3a3c; -fx-border-radius: 6;
+}
+.combo-box .list-cell, .date-picker .text-field, .spinner .text-field { -fx-text-fill: -texto; -fx-background-color: transparent; }
+.combo-box-popup .list-view, .context-menu { -fx-background-color: -gris-claro; }
+.combo-box-popup .list-cell { -fx-background-color: -gris-claro; -fx-text-fill: -texto; }
+.combo-box-popup .list-cell:hover { -fx-background-color: -rojo; }
+.check-box, .radio-button { -fx-text-fill: -texto; }
+.panel { -fx-background-color: -gris; -fx-background-radius: 10; -fx-padding: 18; }
+
+/* ---------- tarjetas de películas ---------- */
+.scroll-pane, .scroll-pane > .viewport { -fx-background-color: transparent; -fx-background: -oscuro; }
+.tarjeta { -fx-background-color: -gris; -fx-background-radius: 8; -fx-padding: 0 0 10 0; -fx-cursor: hand; }
+.tarjeta:hover { -fx-background-color: -gris-claro; -fx-effect: dropshadow(gaussian, -rojo, 12, 0.3, 0, 0); }
+.tarjeta-titulo { -fx-font-weight: bold; -fx-font-size: 13px; -fx-padding: 0 8; }
+.tarjeta-sub { -fx-text-fill: -texto-suave; -fx-font-size: 11px; -fx-padding: 0 8; }
+.sin-poster { -fx-background-color: #2a2a2a; -fx-text-fill: -texto-suave; }
+
+/* ---------- tablas ---------- */
+.table-view { -fx-background-color: -gris; -fx-control-inner-background: -gris; -fx-table-cell-border-color: transparent; -fx-background-radius: 8; }
+.table-view .column-header, .table-view .column-header-background, .table-view .filler { -fx-background-color: -gris-claro; }
+.table-view .column-header .label { -fx-text-fill: -texto; -fx-font-weight: bold; }
+.table-row-cell { -fx-background-color: -gris; -fx-text-fill: -texto; }
+.table-row-cell:odd { -fx-background-color: #222224; }
+.table-row-cell:selected { -fx-background-color: -rojo; }
+.table-cell { -fx-text-fill: -texto; }
+.table-view .placeholder .label { -fx-text-fill: -texto-suave; }
+
+.tab-pane .tab { -fx-background-color: -gris-claro; }
+.tab-pane .tab:selected { -fx-background-color: -rojo; }
+.tab-pane .tab .tab-label { -fx-text-fill: -texto; }
+.tab-pane .tab-header-background { -fx-background-color: -oscuro; }
+
+/* ---------- mapa de asientos ---------- */
+.pantalla-cine { -fx-background-color: linear-gradient(to bottom, #e4002b, transparent); -fx-pref-height: 6; -fx-background-radius: 50 50 0 0; }
+.asiento { -fx-min-width: 34; -fx-min-height: 30; -fx-font-size: 10px; -fx-background-radius: 6 6 3 3;
+           -fx-background-color: #3a3a3c; -fx-text-fill: white; -fx-padding: 0; -fx-cursor: hand; }
+.asiento:hover { -fx-background-color: #5a5a5e; }
+.asiento:selected { -fx-background-color: #00b050; -fx-font-weight: bold; }
+.asiento-ocupado, .asiento-ocupado:disabled { -fx-background-color: #6b1020; -fx-opacity: 0.8; }
+.leyenda-libre { -fx-background-color: #3a3a3c; -fx-min-width: 16; -fx-min-height: 16; -fx-background-radius: 3; }
+.leyenda-seleccionado { -fx-background-color: #00b050; -fx-min-width: 16; -fx-min-height: 16; -fx-background-radius: 3; }
+.leyenda-ocupado { -fx-background-color: #6b1020; -fx-min-width: 16; -fx-min-height: 16; -fx-background-radius: 3; }
+.total { -fx-font-size: 22px; -fx-font-weight: bold; }

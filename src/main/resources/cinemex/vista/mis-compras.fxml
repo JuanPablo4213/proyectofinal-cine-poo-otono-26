@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cinemex.controlador.MisComprasControlador" spacing="14">
+    <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+    <Label text="Mis compras" styleClass="titulo-pantalla"/>
+    <Label fx:id="lblMensaje" styleClass="mensaje"/>
+    <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+        <placeholder><Label text="Sin compras"/></placeholder>
+    </TableView>
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Cancelar compra" onAction="#cancelar" styleClass="boton-peligro"/>
+    </HBox>
+</VBox>

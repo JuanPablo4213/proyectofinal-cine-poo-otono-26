@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cinemex.controlador.AdminPeliculasControlador" spacing="14">
+    <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="Administración · Películas de mi cine" styleClass="titulo-pantalla"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Importar desde TMDB" onAction="#importarNueva" styleClass="boton-primario"/>
+    </HBox>
+    <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+        <placeholder><Label text="Todavía no importas películas"/></placeholder>
+    </TableView>
+    <HBox spacing="12" alignment="CENTER_LEFT" styleClass="panel">
+        <Label fx:id="lblSeleccion" text="Selecciona una película de la tabla" styleClass="subtitulo" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+        <Label text="Clasificación"/>
+        <ComboBox fx:id="cmbClasificacion" prefWidth="90"/>
+        <CheckBox fx:id="chkCartelera" text="En cartelera"/>
+        <Button text="Guardar cambios" onAction="#guardar" styleClass="boton-primario"/>
+        <Button text="Ver detalle" onAction="#verDetalle" styleClass="boton-secundario"/>
+        <Button text="Eliminar" onAction="#eliminar" styleClass="boton-peligro"/>
+    </HBox>
+</VBox>

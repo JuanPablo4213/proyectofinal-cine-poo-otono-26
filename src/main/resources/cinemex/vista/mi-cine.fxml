@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cinemex.controlador.MiCineControlador" spacing="16">
+    <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+    <Label text="Horarios en nuestros cines" styleClass="titulo-pantalla"/>
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="Ciudad"/>
+        <ComboBox fx:id="cmbCiudad" prefWidth="200"/>
+        <Label text="Cine"/>
+        <ComboBox fx:id="cmbCine" prefWidth="220"/>
+        <Label text="Día"/>
+        <DatePicker fx:id="dpDia" prefWidth="160"/>
+    </HBox>
+    <Label fx:id="lblMensaje" styleClass="mensaje"/>
+    <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+        <placeholder><Label text="Sin funciones"/></placeholder>
+    </TableView>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Ver película" onAction="#verPelicula" styleClass="boton-secundario"/>
+        <Button text="Comprar boletos" onAction="#comprar" styleClass="boton-primario"/>
+    </HBox>
+</VBox>

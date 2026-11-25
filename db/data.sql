@@ -2,6 +2,7 @@
 --  Datos de prueba: géneros, usuarios, cines, salas, asientos,
 --  algunas películas y funciones para poder probar la compra.
 -- =====================================================================
+SET NAMES utf8mb4;
 USE cinemex;
 
 -- Usuarios de prueba (contraseñas con SHA-256 + sal)

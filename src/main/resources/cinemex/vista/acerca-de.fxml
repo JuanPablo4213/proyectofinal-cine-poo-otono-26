@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+           fx:controller="cinemex.controlador.AcercaDeControlador">
+    <VBox spacing="16" styleClass="panel" maxWidth="720" maxHeight="520" alignment="TOP_LEFT">
+        <Label text="Acerca de" styleClass="titulo-pantalla"/>
+        <Label wrapText="true" text="Clon de Cinemex hecho en Java con JavaFX (patrón MVC), MySQL y la API de The Movie Database. Proyecto final de Programación Orientada a Objetos, Universidad Iberoamericana, Otoño 2026."/>
+        <Label text="Juan Pablo Flores · Ingeniería en Ciencia de Datos" styleClass="texto-suave"/>
+        <Separator/>
+        <Label text="Datos de películas" styleClass="subtitulo"/>
+        <ImageView fx:id="imgTmdb" fitWidth="260" preserveRatio="true"/>
+        <Label wrapText="true" styleClass="subtitulo"
+               text="This product uses the TMDB API but is not endorsed or certified by TMDB."/>
+        <Label wrapText="true" styleClass="texto-suave"
+               text="Catálogo, pósters y sinopsis: The Movie Database (themoviedb.org). Cinemex es una marca de su respectivo dueño; este es un proyecto escolar sin fines comerciales."/>
+        <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+    </VBox>
+</StackPane>

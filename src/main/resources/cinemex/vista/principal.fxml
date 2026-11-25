@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- Ventana principal: barra arriba + pantalla actual en el centro -->
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cinemex.controlador.PrincipalControlador" styleClass="raiz">
+    <top>
+        <HBox styleClass="barra" spacing="6" alignment="CENTER_LEFT">
+            <Label text="cinemex" styleClass="logo" onMouseClicked="#irCartelera"/>
+            <Button text="Cartelera" onAction="#irCartelera" styleClass="boton-barra"/>
+            <Button text="Mi cine" onAction="#irMiCine" styleClass="boton-barra"/>
+            <Button fx:id="btnMisCompras" text="Mis compras" onAction="#irMisCompras" styleClass="boton-barra"/>
+            <MenuButton fx:id="menuAdmin" text="Administración" styleClass="boton-barra">
+                <items>
+                    <MenuItem text="Películas" onAction="#irAdminPeliculas"/>
+                    <MenuItem text="Cines y salas" onAction="#irAdminCines"/>
+                    <MenuItem text="Funciones" onAction="#irAdminFunciones"/>
+                </items>
+            </MenuButton>
+            <Button text="Acerca de" onAction="#irAcercaDe" styleClass="boton-barra"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblUsuario" styleClass="usuario"/>
+            <Button fx:id="btnSesion" text="Iniciar sesión" onAction="#sesion" styleClass="boton-primario"/>
+        </HBox>
+    </top>
+    <center>
+        <StackPane fx:id="contenido" styleClass="contenido"/>
+    </center>
+</BorderPane>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cinemex.controlador.AdminFuncionesControlador" spacing="14">
+    <padding><Insets top="22" right="28" bottom="22" left="28"/></padding>
+    <Label text="Administración · Funciones" styleClass="titulo-pantalla"/>
+    <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+        <placeholder><Label text="No hay funciones programadas"/></placeholder>
+    </TableView>
+    <VBox spacing="10" styleClass="panel">
+        <Label text="Programar función" styleClass="subtitulo"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Película"/>
+            <ComboBox fx:id="cmbPelicula" prefWidth="230"/>
+            <Label text="Cine"/>
+            <ComboBox fx:id="cmbCine" prefWidth="180"/>
+            <Label text="Sala"/>
+            <ComboBox fx:id="cmbSala" prefWidth="150"/>
+        </HBox>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Fecha"/>
+            <DatePicker fx:id="dpFecha" prefWidth="150"/>
+            <Label text="Hora"/>
+            <TextField fx:id="txtHora" promptText="19:30" prefWidth="80"/>
+            <Label text="Idioma"/>
+            <ComboBox fx:id="cmbIdioma" prefWidth="130"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Agregar" onAction="#nueva" styleClass="boton-primario"/>
+            <Button text="Guardar cambios" onAction="#actualizar" styleClass="boton-secundario"/>
+            <Button text="Eliminar" onAction="#eliminar" styleClass="boton-peligro"/>
+        </HBox>
+    </VBox>
+</VBox>

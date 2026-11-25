@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cinemex.controlador.CarteleraControlador">
+    <top>
+        <VBox spacing="14">
+            <padding><Insets top="20" right="28" bottom="10" left="28"/></padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ToggleButton fx:id="tglPopulares" text="Populares" onAction="#verPopulares"/>
+                <ToggleButton fx:id="tglCartelera" text="En cartelera" onAction="#verCartelera"/>
+                <ToggleButton fx:id="tglProximamente" text="Próximamente" onAction="#verProximamente"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="txtBuscar" promptText="Buscar película por título..." prefWidth="280" onAction="#buscar"/>
+                <Button text="Buscar" onAction="#buscar" styleClass="boton-primario"/>
+                <ComboBox fx:id="cmbGenero" prefWidth="190"/>
+            </HBox>
+            <HBox spacing="14" alignment="CENTER_LEFT">
+                <Label fx:id="lblTitulo" text="Populares" styleClass="titulo-pantalla"/>
+                <ProgressIndicator fx:id="progreso" prefWidth="26" prefHeight="26" visible="false"/>
+                <Label fx:id="lblMensaje" styleClass="mensaje"/>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <ScrollPane fitToWidth="true">
+            <FlowPane fx:id="panelPeliculas" hgap="18" vgap="22">
+                <padding><Insets top="8" right="28" bottom="20" left="28"/></padding>
+            </FlowPane>
+        </ScrollPane>
+    </center>
+    <bottom>
+        <HBox spacing="16" alignment="CENTER">
+            <padding><Insets top="10" bottom="14"/></padding>
+            <Button fx:id="btnAnterior" text="← Anterior" onAction="#paginaAnterior" styleClass="boton-secundario"/>
+            <Label fx:id="lblPagina"/>
+            <Button fx:id="btnSiguiente" text="Siguiente →" onAction="#paginaSiguiente" styleClass="boton-secundario"/>
+        </HBox>
+    </bottom>
+</BorderPane>

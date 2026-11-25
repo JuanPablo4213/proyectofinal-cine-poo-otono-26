@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+           fx:controller="cinemex.controlador.LoginControlador">
+    <HBox spacing="30" alignment="CENTER" maxWidth="820" maxHeight="440">
+        <VBox spacing="12" styleClass="panel" prefWidth="380">
+            <Label text="Iniciar sesión" styleClass="titulo-pantalla"/>
+            <Label text="Correo" styleClass="texto-suave"/>
+            <TextField fx:id="txtEmail" promptText="tucorreo@ejemplo.com"/>
+            <Label text="Contraseña" styleClass="texto-suave"/>
+            <PasswordField fx:id="txtPassword" onAction="#entrar"/>
+            <Label fx:id="lblErrorLogin" styleClass="mensaje-error" wrapText="true"/>
+            <Button text="Entrar" onAction="#entrar" styleClass="boton-primario" maxWidth="Infinity"/>
+            <Label text="Prueba: cliente@cinemex.mx / cliente123" styleClass="texto-suave"/>
+        </VBox>
+        <VBox spacing="8" styleClass="panel" prefWidth="380">
+            <Label text="Crear cuenta" styleClass="titulo-pantalla"/>
+            <TextField fx:id="txtNombre" promptText="Nombre completo"/>
+            <TextField fx:id="txtEmailNuevo" promptText="Correo"/>
+            <TextField fx:id="txtTelefono" promptText="Teléfono (opcional)"/>
+            <PasswordField fx:id="txtPasswordNuevo" promptText="Contraseña (mínimo 6 caracteres)"/>
+            <PasswordField fx:id="txtConfirmar" promptText="Confirmar contraseña" onAction="#registrar"/>
+            <Label fx:id="lblErrorRegistro" styleClass="mensaje-error" wrapText="true"/>
+            <Button text="Crear cuenta" onAction="#registrar" styleClass="boton-secundario" maxWidth="Infinity"/>
+        </VBox>
+        <padding><Insets top="20"/></padding>
+    </HBox>
+</StackPane>
