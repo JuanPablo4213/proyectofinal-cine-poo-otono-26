@@ -1,0 +1,2 @@
+Coloca aquí tmdb-logo.png (logo oficial de TMDB, se muestra en "Acerca de")
+y opcionalmente icono.png (icono de la ventana).

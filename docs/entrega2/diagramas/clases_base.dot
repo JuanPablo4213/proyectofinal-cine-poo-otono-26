@@ -1,0 +1,16 @@
+digraph G {
+graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagrama de clases – módulo cinemex (+ cinemex.base)", labelloc=t, fontsize=18, pad=0.3];
+node [shape=plain, fontname="Helvetica", fontsize=10];
+edge [fontname="Helvetica", fontsize=9];
+"App" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#ECEFF1"><B>App</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ main(args: String[]): void {static}<BR ALIGN="LEFT"/>+ start(ventana: Stage): void<BR ALIGN="LEFT"/>+ stop(): void<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"Config" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#ECEFF1"><B>Config</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _props: Properties {static}<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ get(llave: String): String {static}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"ConexionBD" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#ECEFF1"><B>ConexionBD</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- conexion: Connection {static}<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ obtener(): Connection {static}<BR ALIGN="LEFT"/>+ cerrar(): void {static}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"Seguridad" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#ECEFF1"><B>Seguridad</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ nuevaSal(): String {static}<BR ALIGN="LEFT"/>+ hash(sal: String, password: String): String {static}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"ExcepcionCine" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#ECEFF1"><B>ExcepcionCine</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ ExcepcionCine(mensaje: String)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"ExcepcionTMDB" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#E0F7FA" STYLE="dashed">ExcepcionTMDB<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.tmdb)</FONT></TD></TR></TABLE>>];
+"Contexto" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EDE7F6" STYLE="dashed">Contexto<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.controlador)</FONT></TD></TR></TABLE>>];
+"Navegador" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EDE7F6" STYLE="dashed">Navegador<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.controlador)</FONT></TD></TR></TABLE>>];
+"ExcepcionTMDB" -> "ExcepcionCine" [arrowhead=empty, style=solid];
+"App" -> "Contexto" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="crea"];
+"App" -> "Navegador" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="crea"];
+}

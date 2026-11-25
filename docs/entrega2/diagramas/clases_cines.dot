@@ -1,0 +1,26 @@
+digraph G {
+graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagrama de clases – módulo cinemex.modelo.cines", labelloc=t, fontsize=18, pad=0.3];
+node [shape=plain, fontname="Helvetica", fontsize=10];
+edge [fontname="Helvetica", fontsize=9];
+"POJOCine" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E8F5E9"><B>POJOCine</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _id: int<BR ALIGN="LEFT"/>- _nombre: String<BR ALIGN="LEFT"/>- _ciudad: String<BR ALIGN="LEFT"/>- _direccion: String<BR ALIGN="LEFT"/>- _salas: List&lt;POJOSala&gt;<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ agregarSala(s: POJOSala): boolean<BR ALIGN="LEFT"/>+ tieneSala(s: POJOSala): boolean<BR ALIGN="LEFT"/>+ getters/setters()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOSala" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E8F5E9"><FONT POINT-SIZE="9">«abstract»</FONT><BR/><B><I>POJOSala</I></B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"># id: int<BR ALIGN="LEFT"/># cineId: int<BR ALIGN="LEFT"/># numero: int<BR ALIGN="LEFT"/># filas: int<BR ALIGN="LEFT"/># columnas: int<BR ALIGN="LEFT"/># asientos: List&lt;POJOAsiento&gt;<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ calcularPrecio(tipo: TipoBoleto): double {abstract}<BR ALIGN="LEFT"/>+ getTipoSala(): String {abstract}<BR ALIGN="LEFT"/>+ buscarAsiento(fila: char, numero: int): POJOAsiento<BR ALIGN="LEFT"/>+ getCapacidad(): int<BR ALIGN="LEFT"/>+ setAsientos(lista): void<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOSalaTradicional" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E8F5E9"><B>POJOSalaTradicional</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- PRECIO_BASE: double = 75 {static}<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ calcularPrecio(tipo): double<BR ALIGN="LEFT"/>+ getTipoSala(): String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOSalaPlatino" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E8F5E9"><B>POJOSalaPlatino</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- PRECIO_BASE: double = 160 {static}<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ calcularPrecio(tipo): double<BR ALIGN="LEFT"/>+ getTipoSala(): String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOSalaX4D" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E8F5E9"><B>POJOSalaX4D</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- PRECIO_BASE: double = 120 {static}<BR ALIGN="LEFT"/>- _cargoEfectos: double<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ calcularPrecio(tipo): double<BR ALIGN="LEFT"/>+ getTipoSala(): String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOAsiento" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E8F5E9"><B>POJOAsiento</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _id: int<BR ALIGN="LEFT"/>- _fila: char<BR ALIGN="LEFT"/>- _numero: int<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ getCodigo(): String<BR ALIGN="LEFT"/>+ equals(o): boolean<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOFuncion" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#F3E5F5" STYLE="dashed">POJOFuncion<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.funciones)</FONT></TD></TR></TABLE>>];
+"TipoBoleto" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFEBEE" STYLE="dashed"><FONT POINT-SIZE="8">«enumeration» </FONT>TipoBoleto<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.compras)</FONT></TD></TR></TABLE>>];
+"POJOBoleto" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFEBEE" STYLE="dashed">POJOBoleto<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.compras)</FONT></TD></TR></TABLE>>];
+"ServicioCines" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFFDE7" STYLE="dashed">ServicioCines<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.servicio)</FONT></TD></TR></TABLE>>];
+"POJOSalaTradicional" -> "POJOSala" [arrowhead=empty, style=solid];
+"POJOSalaPlatino" -> "POJOSala" [arrowhead=empty, style=solid];
+"POJOSalaX4D" -> "POJOSala" [arrowhead=empty, style=solid];
+"POJOCine" -> "POJOSala" [arrowtail=diamond, dir=back, arrowhead=vee, label="tiene", taillabel="1", headlabel="1..*"];
+"POJOSala" -> "POJOAsiento" [arrowtail=diamond, dir=back, arrowhead=vee, label="tiene", taillabel="1", headlabel="1..*"];
+"POJOFuncion" -> "POJOSala" [arrowhead=vee, label="se da en", taillabel="0..*", headlabel="1"];
+"POJOFuncion" -> "POJOCine" [arrowhead=vee, label="en", taillabel="0..*", headlabel="1"];
+"POJOFuncion" -> "POJOAsiento" [arrowhead=vee, label="ocupados", headlabel="0..*"];
+"POJOBoleto" -> "POJOAsiento" [arrowhead=vee, label="para", taillabel="0..*", headlabel="1"];
+"POJOSala" -> "TipoBoleto" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="usa"];
+"ServicioCines" -> "POJOCine" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="administra"];
+}

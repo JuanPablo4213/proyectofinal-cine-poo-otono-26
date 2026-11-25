@@ -1,0 +1,422 @@
+@startuml clases_cinemex
+title Diagrama de clases (Entrega 2) - Clon de Cinemex
+skinparam classAttributeIconSize 0
+left to right direction
+
+package cinemex (+ cinemex.base) {
+  class App {
+    + main(args: String[]): void {static}
+    + start(ventana: Stage): void
+    + stop(): void
+  }
+  class Config {
+    - _props: Properties {static}
+    + get(llave: String): String {static}
+  }
+  class ConexionBD {
+    - conexion: Connection {static}
+    + obtener(): Connection {static}
+    + cerrar(): void {static}
+  }
+  class Seguridad {
+    + nuevaSal(): String {static}
+    + hash(sal: String, password: String): String {static}
+  }
+  class ExcepcionCine {
+    + ExcepcionCine(mensaje: String)
+  }
+}
+package cinemex.modelo.usuarios {
+  abstract class POJOUsuario {
+    # id: int
+    # nombre: String
+    # email: String
+    # passwordHash: String
+    # sal: String
+    + getRol(): String {abstract}
+    + validarPassword(password: String): boolean
+    + getters()
+  }
+  class POJOCliente {
+    - _telefono: String
+    + getRol(): String
+    + getTelefono(): String
+  }
+  class POJOAdministrador {
+    - _numEmpleado: String
+    + getRol(): String
+  }
+}
+package cinemex.modelo.peliculas {
+  enum Clasificacion {
+    AA
+    A
+    B
+    B15
+    C
+    D
+    SC
+  }
+  class POJOGenero {
+    - _id: int
+    - _nombre: String
+    + getters()
+  }
+  class POJOPelicula {
+    - _id: int
+    - _tmdbId: int
+    - _titulo: String
+    - _sinopsis: String
+    - _duracionMin: int
+    - _clasificacion: Clasificacion
+    - _posterPath: String
+    - _fechaEstreno: LocalDate
+    - _calificacion: double
+    - _enCartelera: boolean
+    - _generos: List<POJOGenero>
+    + estaImportada(): boolean
+    + getUrlPoster(): String
+    + getGenerosTexto(): String
+    + getters/setters()
+  }
+  interface IFiltroPelicula {
+    + cumple(p: POJOPelicula): boolean
+  }
+  class FiltroTitulo {
+    - _texto: String
+    + cumple(p): boolean
+  }
+  class FiltroGenero {
+    - _genero: POJOGenero
+    + cumple(p): boolean
+  }
+  class FiltroClasificacion {
+    - _clasificacion: Clasificacion
+    + cumple(p): boolean
+  }
+}
+package cinemex.modelo.cines {
+  class POJOCine {
+    - _id: int
+    - _nombre: String
+    - _ciudad: String
+    - _direccion: String
+    - _salas: List<POJOSala>
+    + agregarSala(s: POJOSala): boolean
+    + tieneSala(s: POJOSala): boolean
+    + getters/setters()
+  }
+  abstract class POJOSala {
+    # id: int
+    # cineId: int
+    # numero: int
+    # filas: int
+    # columnas: int
+    # asientos: List<POJOAsiento>
+    + calcularPrecio(tipo: TipoBoleto): double {abstract}
+    + getTipoSala(): String {abstract}
+    + buscarAsiento(fila: char, numero: int): POJOAsiento
+    + getCapacidad(): int
+    + setAsientos(lista): void
+  }
+  class POJOSalaTradicional {
+    - PRECIO_BASE: double = 75 {static}
+    + calcularPrecio(tipo): double
+    + getTipoSala(): String
+  }
+  class POJOSalaPlatino {
+    - PRECIO_BASE: double = 160 {static}
+    + calcularPrecio(tipo): double
+    + getTipoSala(): String
+  }
+  class POJOSalaX4D {
+    - PRECIO_BASE: double = 120 {static}
+    - _cargoEfectos: double
+    + calcularPrecio(tipo): double
+    + getTipoSala(): String
+  }
+  class POJOAsiento {
+    - _id: int
+    - _fila: char
+    - _numero: int
+    + getCodigo(): String
+    + equals(o): boolean
+  }
+}
+package cinemex.modelo.funciones {
+  enum Idioma {
+    ESPANOL
+    SUBTITULADA
+  }
+  class POJOFuncion {
+    - _id: int
+    - _pelicula: POJOPelicula
+    - _cine: POJOCine
+    - _sala: POJOSala
+    - _fechaHora: LocalDateTime
+    - _idioma: Idioma
+    - _asientosOcupados: List<POJOAsiento>
+    + MINUTOS_LIMPIEZA: int = 20 {static}
+    + estaDisponible(a): boolean
+    + ocupar(a): boolean
+    + liberar(a): void
+    + getAsientosDisponibles(): List
+    + calcularHoraFin(): LocalDateTime
+    + yaEmpezo(): boolean
+  }
+}
+package cinemex.modelo.compras {
+  enum TipoBoleto {
+    ADULTO (1.0)
+    NINO (0.7)
+    ADULTO_MAYOR (0.7)
+  }
+  enum EstadoCompra {
+    PENDIENTE
+    PAGADA
+    CANCELADA
+  }
+  class POJOBoleto {
+    - _id: int
+    - _funcion: POJOFuncion
+    - _asiento: POJOAsiento
+    - _tipo: TipoBoleto
+    - _precio: double
+    + getters()
+  }
+  class POJOCompra {
+    + MAX_BOLETOS: int = 10 {static}
+    - _id: int
+    - _cliente: POJOCliente
+    - _funcion: POJOFuncion
+    - _boletos: List<POJOBoleto>
+    - _metodo: IMetodoPago
+    - _estado: EstadoCompra
+    - _fecha: LocalDateTime
+    - _comision: double
+    + agregarBoleto(b): boolean
+    + tieneAsiento(a): boolean
+    + calcularTotal(): double
+    + getters/setters()
+  }
+  interface IMetodoPago {
+    + validar(): boolean
+    + calcularComision(monto: double): double
+    + getNombre(): String
+    + getReferencia(): String
+  }
+  class PagoTarjeta {
+    - _numeroTarjeta: String
+    - _cvv: String
+    + validar(): boolean
+    + calcularComision(monto): double
+  }
+  class PagoPayPal {
+    - _correo: String
+    + validar(): boolean
+    + calcularComision(monto): double
+  }
+}
+package cinemex.servicio {
+  class ServicioUsuarios {
+    - _usuarioActual: POJOUsuario
+    + guardar(obj: POJOUsuario): boolean
+    + registrarCliente(nombre, email, tel, password): POJOCliente
+    + buscarPorId(id): POJOUsuario
+    + buscarPorEmail(email): POJOUsuario
+    + listar(): List
+    + iniciarSesion(email, password): POJOUsuario
+    + cerrarSesion(): void
+    + getUsuarioActual(): POJOUsuario
+    + getClienteActual(): POJOCliente
+    + esAdministrador(): boolean
+  }
+  class ServicioPeliculas {
+    + guardar(obj: POJOPelicula): boolean
+    + actualizar(obj): boolean
+    + eliminar(id): boolean
+    + buscarPorId(id): POJOPelicula
+    + buscarPorTmdbId(tmdbId): POJOPelicula
+    + listar(): List
+    + listarCartelera(): List
+    + buscar(filtros: List<IFiltroPelicula>): List
+    + sincronizarGeneros(generos): void
+    + listarGeneros(): List<POJOGenero>
+  }
+  class ServicioCines {
+    + guardar(obj: POJOCine): boolean
+    + eliminar(id): boolean
+    + buscarPorId(id): POJOCine
+    + listar(): List
+    + listarPorCiudad(ciudad): List
+    + listarCiudades(): List<String>
+    + crearSala(tipo, id, cineId, numero, filas, columnas, cargo): POJOSala
+    + agregarSala(cine, sala): boolean
+    + eliminarSala(salaId): boolean
+    + cargarAsientos(sala): void
+  }
+  class ServicioFunciones {
+    - _peliculas: ServicioPeliculas
+    - _cines: ServicioCines
+    + guardar(obj: POJOFuncion): boolean
+    + eliminar(id): boolean
+    + buscarPorId(id): POJOFuncion
+    + listar(): List
+    + listarPorPelicula(p): List
+    + listarPorCineYPelicula(c, p, dia): List
+    + listarPorCineYDia(c, dia): List
+    + cargarOcupados(f): void
+    + contarBoletos(funcionId): int
+  }
+  class ServicioCompras {
+    - _funciones: ServicioFunciones
+    + MAX_BOLETOS: int = 10 {static}
+    + iniciarCompra(c: POJOCliente, f: POJOFuncion): POJOCompra
+    + agregarBoleto(compra, a, tipo): boolean
+    + confirmarCompra(compra, m: IMetodoPago): boolean
+    + cancelar(id): boolean
+    + buscarPorId(id): POJOCompra
+    + listarPorCliente(c): List<POJOCompra>
+  }
+}
+package cinemex.tmdb {
+  class ClienteTMDB {
+    - _http: HttpClient
+    - _gson: Gson
+    - _token: String
+    - _apiKey: String
+    - _generos: Map<Integer,POJOGenero>
+    + populares(pagina): PaginaPeliculas
+    + enCartelera(pagina): PaginaPeliculas
+    + proximosEstrenos(pagina): PaginaPeliculas
+    + buscar(texto, pagina): PaginaPeliculas
+    + detalle(tmdbId): POJOPelicula
+    + generos(): List<POJOGenero>
+  }
+  class PaginaPeliculas {
+    - _pagina: int
+    - _totalPaginas: int
+    - _totalResultados: int
+    - _peliculas: List<POJOPelicula>
+    + tieneAnterior(): boolean
+    + tieneSiguiente(): boolean
+  }
+  class PeliculaDTO {
+    + id, title, overview, posterPath, releaseDate
+    + voteAverage, genreIds, runtime, genres, releaseDates
+  }
+  class PaginaDTO {
+    + page: int
+    + totalPages: int
+    + totalResults: int
+    + results: List<PeliculaDTO>
+  }
+  class ExcepcionTMDB {
+  }
+}
+package cinemex.controlador {
+  class Contexto {
+    - servicios (5)
+    - _tmdb: ClienteTMDB
+    - _navegador: Navegador
+    + usuarios() ... compras(): Servicio
+    + tmdb(): ClienteTMDB
+  }
+  class Navegador {
+    - _historial: Deque<Parent>
+    + iniciar(): void
+    + ir(vista, preparar): T
+    + regresar(): void
+    + requiereSesion(accion): void
+  }
+  abstract class ControladorBase {
+    # ctx: Contexto
+    # alIniciar(): void
+    # mostrarError(e): void
+    # enSegundoPlano(trabajo, ok, error): void
+  }
+  class CarteleraControlador {
+    - cargar(pagina): void
+    - mostrarPeliculas(): void
+  }
+  class DetalleControlador {
+    - importar(): void
+    - comprar(): void
+  }
+  class CompraControlador {
+    - dibujarMapa(): void
+    - pagar(): void
+  }
+  class MiCineControlador {
+  }
+  class MisComprasControlador {
+    - cancelar(): void
+  }
+  class LoginControlador {
+    - entrar(): void
+    - registrar(): void
+  }
+  class Admin*Controlador (3) {
+    CRUD películas / cines y salas / funciones
+  }
+  class Tareas {
+    + enSegundoPlano(trabajo, ok, error): void {static}
+  }
+}
+
+POJOUsuario <|-- POJOCliente
+POJOUsuario <|-- POJOAdministrador
+POJOSala <|-- POJOSalaTradicional
+POJOSala <|-- POJOSalaPlatino
+POJOSala <|-- POJOSalaX4D
+IFiltroPelicula <|.. FiltroTitulo
+IFiltroPelicula <|.. FiltroGenero
+IFiltroPelicula <|.. FiltroClasificacion
+IMetodoPago <|.. PagoTarjeta
+IMetodoPago <|.. PagoPayPal
+ExcepcionCine <|-- ExcepcionTMDB
+ControladorBase <|-- CarteleraControlador
+ControladorBase <|-- DetalleControlador
+ControladorBase <|-- CompraControlador
+ControladorBase <|-- MiCineControlador
+ControladorBase <|-- MisComprasControlador
+ControladorBase <|-- LoginControlador
+ControladorBase <|-- Admin*Controlador (3)
+POJOCine "1" *-- "1..*" POJOSala : tiene
+POJOSala "1" *-- "1..*" POJOAsiento : tiene
+POJOPelicula "0..*" --> "0..*" POJOGenero : géneros
+POJOPelicula --> "1" Clasificacion
+POJOFuncion "0..*" --> "1" POJOPelicula : proyecta
+POJOFuncion "0..*" --> "1" POJOSala : se da en
+POJOFuncion "0..*" --> "1" POJOCine : en
+POJOFuncion --> "0..*" POJOAsiento : ocupados
+POJOFuncion --> "1" Idioma
+POJOCompra "1" *-- "1..10" POJOBoleto : incluye
+POJOCompra "0..*" --> "1" POJOCliente : realiza
+POJOCompra "0..*" --> "1" POJOFuncion : para
+POJOCompra --> "0..1" IMetodoPago : se paga con
+POJOCompra --> "1" EstadoCompra
+POJOBoleto "0..*" --> "1" POJOAsiento : para
+POJOBoleto --> "1" TipoBoleto
+POJOSala ..> TipoBoleto : usa
+ServicioUsuarios ..> POJOUsuario : administra
+ServicioPeliculas ..> POJOPelicula : administra
+ServicioPeliculas ..> IFiltroPelicula : usa
+ServicioCines ..> POJOCine : administra
+ServicioFunciones ..> POJOFuncion : administra
+ServicioFunciones --> "1" ServicioPeliculas
+ServicioFunciones --> "1" ServicioCines
+ServicioCompras --> "1" ServicioFunciones
+ServicioCompras ..> POJOCompra : administra
+ClienteTMDB ..> PaginaPeliculas : regresa
+ClienteTMDB ..> PeliculaDTO : lee JSON
+ClienteTMDB ..> POJOPelicula : convierte a
+ClienteTMDB ..> ExcepcionTMDB : lanza
+PaginaDTO --> "0..*" PeliculaDTO
+Contexto --> "1" ClienteTMDB
+Contexto --> "1" Navegador
+ControladorBase --> "1" Contexto : ctx
+ControladorBase ..> Tareas : usa
+App ..> Contexto : crea
+App ..> Navegador : crea
+@enduml

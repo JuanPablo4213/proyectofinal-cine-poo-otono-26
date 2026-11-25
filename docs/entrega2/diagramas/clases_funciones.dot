@@ -1,0 +1,20 @@
+digraph G {
+graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagrama de clases – módulo cinemex.modelo.funciones", labelloc=t, fontsize=18, pad=0.3];
+node [shape=plain, fontname="Helvetica", fontsize=10];
+edge [fontname="Helvetica", fontsize=9];
+"Idioma" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#F3E5F5"><FONT POINT-SIZE="9">«enumeration»</FONT><BR/><B>Idioma</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">ESPANOL<BR ALIGN="LEFT"/>SUBTITULADA<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOFuncion" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#F3E5F5"><B>POJOFuncion</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _id: int<BR ALIGN="LEFT"/>- _pelicula: POJOPelicula<BR ALIGN="LEFT"/>- _cine: POJOCine<BR ALIGN="LEFT"/>- _sala: POJOSala<BR ALIGN="LEFT"/>- _fechaHora: LocalDateTime<BR ALIGN="LEFT"/>- _idioma: Idioma<BR ALIGN="LEFT"/>- _asientosOcupados: List&lt;POJOAsiento&gt;<BR ALIGN="LEFT"/>+ MINUTOS_LIMPIEZA: int = 20 {static}<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ estaDisponible(a): boolean<BR ALIGN="LEFT"/>+ ocupar(a): boolean<BR ALIGN="LEFT"/>+ liberar(a): void<BR ALIGN="LEFT"/>+ getAsientosDisponibles(): List<BR ALIGN="LEFT"/>+ calcularHoraFin(): LocalDateTime<BR ALIGN="LEFT"/>+ yaEmpezo(): boolean<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOPelicula" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFF3E0" STYLE="dashed">POJOPelicula<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.peliculas)</FONT></TD></TR></TABLE>>];
+"POJOCine" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#E8F5E9" STYLE="dashed">POJOCine<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.cines)</FONT></TD></TR></TABLE>>];
+"POJOSala" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#E8F5E9" STYLE="dashed"><FONT POINT-SIZE="8">«abstract» </FONT>POJOSala<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.cines)</FONT></TD></TR></TABLE>>];
+"POJOAsiento" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#E8F5E9" STYLE="dashed">POJOAsiento<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.cines)</FONT></TD></TR></TABLE>>];
+"POJOCompra" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFEBEE" STYLE="dashed">POJOCompra<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.compras)</FONT></TD></TR></TABLE>>];
+"ServicioFunciones" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFFDE7" STYLE="dashed">ServicioFunciones<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.servicio)</FONT></TD></TR></TABLE>>];
+"POJOFuncion" -> "POJOPelicula" [arrowhead=vee, label="proyecta", taillabel="0..*", headlabel="1"];
+"POJOFuncion" -> "POJOSala" [arrowhead=vee, label="se da en", taillabel="0..*", headlabel="1"];
+"POJOFuncion" -> "POJOCine" [arrowhead=vee, label="en", taillabel="0..*", headlabel="1"];
+"POJOFuncion" -> "POJOAsiento" [arrowhead=vee, label="ocupados", headlabel="0..*"];
+"POJOFuncion" -> "Idioma" [arrowhead=vee, headlabel="1"];
+"POJOCompra" -> "POJOFuncion" [arrowhead=vee, label="para", taillabel="0..*", headlabel="1"];
+"ServicioFunciones" -> "POJOFuncion" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="administra"];
+}

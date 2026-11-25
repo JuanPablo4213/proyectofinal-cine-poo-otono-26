@@ -1,0 +1,14 @@
+digraph G {
+graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagrama de clases – módulo cinemex.modelo.usuarios", labelloc=t, fontsize=18, pad=0.3];
+node [shape=plain, fontname="Helvetica", fontsize=10];
+edge [fontname="Helvetica", fontsize=9];
+"POJOUsuario" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E3F2FD"><FONT POINT-SIZE="9">«abstract»</FONT><BR/><B><I>POJOUsuario</I></B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"># id: int<BR ALIGN="LEFT"/># nombre: String<BR ALIGN="LEFT"/># email: String<BR ALIGN="LEFT"/># passwordHash: String<BR ALIGN="LEFT"/># sal: String<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ getRol(): String {abstract}<BR ALIGN="LEFT"/>+ validarPassword(password: String): boolean<BR ALIGN="LEFT"/>+ getters()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOCliente" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E3F2FD"><B>POJOCliente</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _telefono: String<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ getRol(): String<BR ALIGN="LEFT"/>+ getTelefono(): String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOAdministrador" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E3F2FD"><B>POJOAdministrador</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _numEmpleado: String<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ getRol(): String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOCompra" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFEBEE" STYLE="dashed">POJOCompra<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.compras)</FONT></TD></TR></TABLE>>];
+"ServicioUsuarios" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFFDE7" STYLE="dashed">ServicioUsuarios<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.servicio)</FONT></TD></TR></TABLE>>];
+"POJOCliente" -> "POJOUsuario" [arrowhead=empty, style=solid];
+"POJOAdministrador" -> "POJOUsuario" [arrowhead=empty, style=solid];
+"POJOCompra" -> "POJOCliente" [arrowhead=vee, label="realiza", taillabel="0..*", headlabel="1"];
+"ServicioUsuarios" -> "POJOUsuario" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="administra"];
+}

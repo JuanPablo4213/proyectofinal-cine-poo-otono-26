@@ -1,0 +1,24 @@
+digraph G {
+graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagrama de clases – módulo cinemex.modelo.peliculas", labelloc=t, fontsize=18, pad=0.3];
+node [shape=plain, fontname="Helvetica", fontsize=10];
+edge [fontname="Helvetica", fontsize=9];
+"Clasificacion" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FFF3E0"><FONT POINT-SIZE="9">«enumeration»</FONT><BR/><B>Clasificacion</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">AA<BR ALIGN="LEFT"/>A<BR ALIGN="LEFT"/>B<BR ALIGN="LEFT"/>B15<BR ALIGN="LEFT"/>C<BR ALIGN="LEFT"/>D<BR ALIGN="LEFT"/>SC<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOGenero" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FFF3E0"><B>POJOGenero</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _id: int<BR ALIGN="LEFT"/>- _nombre: String<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ getters()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOPelicula" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FFF3E0"><B>POJOPelicula</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _id: int<BR ALIGN="LEFT"/>- _tmdbId: int<BR ALIGN="LEFT"/>- _titulo: String<BR ALIGN="LEFT"/>- _sinopsis: String<BR ALIGN="LEFT"/>- _duracionMin: int<BR ALIGN="LEFT"/>- _clasificacion: Clasificacion<BR ALIGN="LEFT"/>- _posterPath: String<BR ALIGN="LEFT"/>- _fechaEstreno: LocalDate<BR ALIGN="LEFT"/>- _calificacion: double<BR ALIGN="LEFT"/>- _enCartelera: boolean<BR ALIGN="LEFT"/>- _generos: List&lt;POJOGenero&gt;<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ estaImportada(): boolean<BR ALIGN="LEFT"/>+ getUrlPoster(): String<BR ALIGN="LEFT"/>+ getGenerosTexto(): String<BR ALIGN="LEFT"/>+ getters/setters()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"IFiltroPelicula" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FFF3E0"><FONT POINT-SIZE="9">«interface»</FONT><BR/><B><I>IFiltroPelicula</I></B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ cumple(p: POJOPelicula): boolean<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"FiltroTitulo" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FFF3E0"><B>FiltroTitulo</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _texto: String<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ cumple(p): boolean<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"FiltroGenero" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FFF3E0"><B>FiltroGenero</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _genero: POJOGenero<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ cumple(p): boolean<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"FiltroClasificacion" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FFF3E0"><B>FiltroClasificacion</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _clasificacion: Clasificacion<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ cumple(p): boolean<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"POJOFuncion" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#F3E5F5" STYLE="dashed">POJOFuncion<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.funciones)</FONT></TD></TR></TABLE>>];
+"ServicioPeliculas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFFDE7" STYLE="dashed">ServicioPeliculas<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.servicio)</FONT></TD></TR></TABLE>>];
+"ClienteTMDB" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#E0F7FA" STYLE="dashed">ClienteTMDB<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.tmdb)</FONT></TD></TR></TABLE>>];
+"FiltroTitulo" -> "IFiltroPelicula" [arrowhead=empty, style=dashed];
+"FiltroGenero" -> "IFiltroPelicula" [arrowhead=empty, style=dashed];
+"FiltroClasificacion" -> "IFiltroPelicula" [arrowhead=empty, style=dashed];
+"POJOPelicula" -> "POJOGenero" [arrowhead=vee, label="géneros", taillabel="0..*", headlabel="0..*"];
+"POJOPelicula" -> "Clasificacion" [arrowhead=vee, headlabel="1"];
+"POJOFuncion" -> "POJOPelicula" [arrowhead=vee, label="proyecta", taillabel="0..*", headlabel="1"];
+"ServicioPeliculas" -> "POJOPelicula" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="administra"];
+"ServicioPeliculas" -> "IFiltroPelicula" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="usa"];
+"ClienteTMDB" -> "POJOPelicula" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="convierte a"];
+}
