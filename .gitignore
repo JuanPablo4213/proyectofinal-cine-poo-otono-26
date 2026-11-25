@@ -11,3 +11,6 @@ target/
 *.iml
 .vscode/
 .DS_Store
+
+# Python (scripts de diagramas)
+__pycache__/
