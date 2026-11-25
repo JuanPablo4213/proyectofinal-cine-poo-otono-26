@@ -1,0 +1,24 @@
+# Levanta MySQL 8.4 con la base "cinemex" ya creada y con datos de prueba.
+# Uso:  ./scripts/levantar-mysql.sh   (o: docker compose up -d)
+# Las contraseñas se leen del archivo .env (NO se sube a GitHub; ver .env.example)
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: cinemex-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: cinemex
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: America/Mexico_City
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3307:3306"   # 3307 en la Mac para no chocar con un MySQL local
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - cinemex-datos:/var/lib/mysql
+
+volumes:
+  cinemex-datos:

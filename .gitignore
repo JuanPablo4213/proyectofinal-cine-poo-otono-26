@@ -1,0 +1,13 @@
+# Credenciales: NUNCA se suben
+config.properties
+.env
+
+# Maven / compilados
+target/
+*.class
+
+# IDEs y sistema
+.idea/
+*.iml
+.vscode/
+.DS_Store

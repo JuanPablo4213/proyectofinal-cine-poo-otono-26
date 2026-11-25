@@ -1,0 +1,13 @@
+# Copia este archivo como config.properties (en la raíz del proyecto) y llena tus datos.
+# config.properties NO se sube a GitHub (está en .gitignore).
+
+# --- Base de datos (los mismos datos que pusiste en .env) ---
+db.url=jdbc:mysql://localhost:3307/cinemex?serverTimezone=America/Mexico_City&characterEncoding=UTF-8
+db.usuario=cinemex_app
+db.password=cambia_esta_contrasena
+
+# --- TMDB: usa UNO de los dos (el token de lectura es el recomendado) ---
+# Token de acceso de lectura (API Read Access Token), en themoviedb.org > Ajustes > API
+tmdb.token=
+# o la API Key (v3)
+tmdb.apiKey=
