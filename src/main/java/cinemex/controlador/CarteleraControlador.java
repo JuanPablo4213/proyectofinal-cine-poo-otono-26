@@ -4,7 +4,7 @@ import cinemex.modelo.peliculas.FiltroGenero;
 import cinemex.modelo.peliculas.IFiltroPelicula;
 import cinemex.modelo.peliculas.POJOGenero;
 import cinemex.modelo.peliculas.POJOPelicula;
-import cinemex.tmdb.PaginaPeliculas;
+import cinemex.catalogo.PaginaPeliculas;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
@@ -18,8 +18,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 
 /**
- * Catálogo de TMDB: Populares, En cartelera, Próximamente y Búsqueda.
- * Cada sección se pide a TMDB en segundo plano y se puede pasar de página.
+ * Catálogo (API del grupo o TMDB): Populares, En cartelera, Próximamente y Búsqueda.
+ * Cada sección se pide en segundo plano y se puede pasar de página.
  */
 public class CarteleraControlador extends ControladorBase {
     private enum Seccion { POPULARES, EN_CARTELERA, PROXIMAMENTE, BUSQUEDA }
@@ -87,7 +87,7 @@ public class CarteleraControlador extends ControladorBase {
         cargar(1);
     }
 
-    /** Pide la página a TMDB en segundo plano para que la ventana no se congele. */
+    /** Pide la página al catálogo en segundo plano para que la ventana no se congele. */
     private void cargar(int pagina) {
         progreso.setVisible(true);
         lblMensaje.setText("Cargando películas...");
@@ -98,10 +98,10 @@ public class CarteleraControlador extends ControladorBase {
         String texto = _textoBusqueda;
         enSegundoPlano(() -> {
             switch (seccion) {
-                case EN_CARTELERA: return ctx.tmdb().enCartelera(pagina);
-                case PROXIMAMENTE: return ctx.tmdb().proximosEstrenos(pagina);
-                case BUSQUEDA: return ctx.tmdb().buscar(texto, pagina);
-                default: return ctx.tmdb().populares(pagina);
+                case EN_CARTELERA: return ctx.catalogo().enCartelera(pagina);
+                case PROXIMAMENTE: return ctx.catalogo().proximosEstrenos(pagina);
+                case BUSQUEDA: return ctx.catalogo().buscar(texto, pagina);
+                default: return ctx.catalogo().populares(pagina);
             }
         }, resultado -> {
             progreso.setVisible(false);
@@ -136,7 +136,7 @@ public class CarteleraControlador extends ControladorBase {
         if (_paginaActual.getPeliculas().isEmpty()) {
             lblMensaje.setText(_seccion == Seccion.BUSQUEDA
                     ? "No se encontraron películas para \"" + _textoBusqueda + "\"."
-                    : "TMDB no regresó películas en esta sección.");
+                    : "La API no regresó películas en esta sección.");
         } else if (panelPeliculas.getChildren().isEmpty()) {
             lblMensaje.setText("Ninguna película de esta página es de " + genero + ". Prueba la siguiente página.");
         } else {
@@ -147,9 +147,9 @@ public class CarteleraControlador extends ControladorBase {
         btnSiguiente.setDisable(!_paginaActual.tieneSiguiente());
     }
 
-    /** Catálogo de géneros: de TMDB al ComboBox y a la tabla "generos" de MySQL. */
+    /** Catálogo de géneros: de la API al ComboBox y a la tabla "generos" de MySQL. */
     private void cargarGeneros() {
-        enSegundoPlano(() -> ctx.tmdb().generos(), generos -> {
+        enSegundoPlano(() -> ctx.catalogo().generos(), generos -> {
             cmbGenero.getItems().setAll(TODOS);
             cmbGenero.getItems().addAll(generos);
             cmbGenero.setValue(TODOS);
@@ -159,7 +159,7 @@ public class CarteleraControlador extends ControladorBase {
                 lblMensaje.setText("Aviso: no se pudieron guardar los géneros en MySQL. " + e.getMessage());
             }
         }, error -> {
-            // sin TMDB usamos los géneros guardados en la base
+            // sin API usamos los géneros guardados en la base
             try {
                 cmbGenero.getItems().addAll(ctx.peliculas().listarGeneros());
             } catch (RuntimeException ignorada) {

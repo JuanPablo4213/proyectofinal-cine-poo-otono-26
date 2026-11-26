@@ -3,7 +3,7 @@ from modelo import CLASES, RELACIONES, PAQUETES
 
 OUT = sys.argv[1]
 COLORES = {"base": "#ECEFF1", "usuarios": "#E3F2FD", "peliculas": "#FFF3E0", "cines": "#E8F5E9",
-           "funciones": "#F3E5F5", "compras": "#FFEBEE", "servicio": "#FFFDE7", "tmdb": "#E0F7FA", "controlador": "#EDE7F6"}
+           "funciones": "#F3E5F5", "compras": "#FFEBEE", "servicio": "#FFFDE7", "catalogo": "#FCE4EC", "api": "#E1F5FE", "tmdb": "#E0F7FA", "controlador": "#EDE7F6"}
 
 def esc(s):
     return html.escape(s)
@@ -45,7 +45,7 @@ def dot(clases_filtro=None, sin_menus=False, nombre="clases"):
                 continue
             if clases_filtro and n not in clases_filtro:
                 continue
-            if sin_menus and p in ("base", "servicio", "tmdb", "controlador"):
+            if sin_menus and p in ("base", "servicio", "catalogo", "api", "tmdb", "controlador"):
                 continue
             nombres.add(n)
             bloque.append(f'"{n}" [label={etiqueta(n, est, at, me, COLORES[p])}];')

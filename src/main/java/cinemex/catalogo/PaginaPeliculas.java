@@ -1,4 +1,4 @@
-package cinemex.tmdb;
+package cinemex.catalogo;
 
 import cinemex.modelo.peliculas.POJOPelicula;
 import java.util.List;

@@ -1,0 +1,22 @@
+digraph G {
+graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagrama de clases – módulo cinemex.catalogo", labelloc=t, fontsize=18, pad=0.3];
+node [shape=plain, fontname="Helvetica", fontsize=10];
+edge [fontname="Helvetica", fontsize=9];
+"PaginaPeliculas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FCE4EC"><B>PaginaPeliculas</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _pagina: int<BR ALIGN="LEFT"/>- _totalPaginas: int<BR ALIGN="LEFT"/>- _totalResultados: int<BR ALIGN="LEFT"/>- _peliculas: List&lt;POJOPelicula&gt;<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ tieneAnterior(): boolean<BR ALIGN="LEFT"/>+ tieneSiguiente(): boolean<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"IClientePeliculas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FCE4EC"><FONT POINT-SIZE="9">«interface»</FONT><BR/><B><I>IClientePeliculas</I></B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ populares(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ enCartelera(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ proximosEstrenos(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ buscar(texto, pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ detalle(id): POJOPelicula<BR ALIGN="LEFT"/>+ generos(): List&lt;POJOGenero&gt;<BR ALIGN="LEFT"/>+ getNombre(): String<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"ExcepcionCatalogo" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#FCE4EC"><B>ExcepcionCatalogo</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR></TABLE>>];
+"ExcepcionCine" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#ECEFF1" STYLE="dashed">ExcepcionCine<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex (+ cinemex.base))</FONT></TD></TR></TABLE>>];
+"ClienteTMDB" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#E0F7FA" STYLE="dashed">ClienteTMDB<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.tmdb)</FONT></TD></TR></TABLE>>];
+"ExcepcionTMDB" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#E0F7FA" STYLE="dashed">ExcepcionTMDB<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.tmdb)</FONT></TD></TR></TABLE>>];
+"ClienteCinemexAPI" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#E1F5FE" STYLE="dashed">ClienteCinemexAPI<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.api)</FONT></TD></TR></TABLE>>];
+"Contexto" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EDE7F6" STYLE="dashed">Contexto<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.controlador)</FONT></TD></TR></TABLE>>];
+"ExcepcionTMDB" -> "ExcepcionCatalogo" [arrowhead=empty, style=solid];
+"ExcepcionCatalogo" -> "ExcepcionCine" [arrowhead=empty, style=solid];
+"ClienteTMDB" -> "IClientePeliculas" [arrowhead=empty, style=dashed];
+"ClienteCinemexAPI" -> "IClientePeliculas" [arrowhead=empty, style=dashed];
+"ClienteCinemexAPI" -> "PaginaPeliculas" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="regresa"];
+"ClienteCinemexAPI" -> "ExcepcionCatalogo" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="lanza"];
+"IClientePeliculas" -> "PaginaPeliculas" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="regresa"];
+"ClienteTMDB" -> "PaginaPeliculas" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="regresa"];
+"Contexto" -> "IClientePeliculas" [arrowhead=vee, label="catalogo", headlabel="1"];
+}

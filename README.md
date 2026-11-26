@@ -3,11 +3,11 @@
 **Universidad Iberoamericana · Programación Orientada a Objetos · Otoño 2026**
 Juan Pablo Flores · Ingeniería en Ciencia de Datos
 
-Aplicación de escritorio en **Java 17 + JavaFX** con el patrón **MVC**, construida con **Maven**, conectada a **MySQL** (en Docker) y que obtiene su catálogo de películas de **The Movie Database (TMDB)**.
+Aplicación de escritorio en **Java 17 + JavaFX** con el patrón **MVC**, construida con **Maven**, conectada a **MySQL** (en Docker) y que obtiene su catálogo de películas de la **API de películas del grupo** (aprobada por el profesor), que a su vez toma los datos de **The Movie Database (TMDB)**.
 
 Con la app puedes:
 
-- **Explorar películas de TMDB:** populares, en cartelera y próximamente, con búsqueda, filtro por género y paginación.
+- **Explorar el catálogo de películas:** populares, en cartelera y próximamente, con búsqueda, filtro por género y paginación.
 - **Ver el detalle de una película** y, como administrador, **importarla** a la cartelera de tu cine.
 - **Consultar horarios** por ciudad, cine y día.
 - **Comprar boletos** eligiendo asientos en un mapa, con varios tipos de boleto, y pagar con tarjeta o PayPal (simulado).
@@ -24,7 +24,7 @@ Con la app puedes:
 | Construcción | Maven (`pom.xml`) |
 | Interfaz gráfica | JavaFX 21 (vistas FXML + CSS) |
 | Base de datos | MySQL 8.4 en Docker (`docker-compose.yml`) |
-| Catálogo | API de TMDB con `java.net.http.HttpClient` y Gson |
+| Catálogo | [API de películas del grupo](https://api-cinemex-akd3btgfhsgnf5d5.northcentralus-01.azurewebsites.net/api/peliculas/swagger) (datos de TMDB) con `java.net.http.HttpClient` y Gson. Alternativa: TMDB directo |
 
 ---
 
@@ -43,11 +43,9 @@ cp config.properties.example config.properties    # MySQL + llave de TMDB para l
 ```
 
 - En `.env`, cambia las contraseñas.
-- En `config.properties`, pon la **misma** `db.password` que pusiste en `MYSQL_PASSWORD`, y tu llave de TMDB:
-  - `tmdb.token`: el *API Read Access Token* (recomendado), o
-  - `tmdb.apiKey`: la *API Key*.
-
-  Las dos se sacan en [themoviedb.org](https://www.themoviedb.org/) → Ajustes → API.
+- En `config.properties`, pon la **misma** `db.password` que pusiste en `MYSQL_PASSWORD`.
+- El catálogo usa por defecto la API del grupo (`peliculas.fuente=api`), que **no necesita llave**.
+- Si algún día quieres usar TMDB directo, pon `peliculas.fuente=tmdb` y tu token en `tmdb.token`. El token se saca en themoviedb.org → Ajustes → API.
 
 **3. Levantar MySQL** (crea la base con `db/schema.sql` y la llena con `db/data.sql`):
 
@@ -100,7 +98,9 @@ src/main/java/cinemex/
 │   └── compras/             POJOCompra, POJOBoleto, TipoBoleto, EstadoCompra, IMetodoPago, PagoTarjeta, PagoPayPal
 ├── servicio/                M: reglas de negocio + MySQL (ServicioUsuarios, ServicioPeliculas,
 │                               ServicioCines, ServicioFunciones, ServicioCompras)
-├── tmdb/                    cliente de la API (ClienteTMDB) y DTOs del JSON
+├── catalogo/                IClientePeliculas (contrato del catálogo), PaginaPeliculas, ExcepcionCatalogo
+├── api/                     ClienteCinemexAPI (API del grupo, la que se usa) y sus DTOs
+├── tmdb/                    ClienteTMDB (TMDB directo, alternativa) y sus DTOs
 └── controlador/             C: un controlador por pantalla + Navegador, Contexto, Tareas
 src/main/resources/cinemex/
 ├── vista/*.fxml             V: las pantallas
@@ -113,26 +113,34 @@ src/main/resources/cinemex/
 
 ---
 
-## Integración con TMDB
+## Catálogo de películas (API del grupo)
+
+Con autorización del profesor, el catálogo se obtiene de la API de películas de mis compañeros, que expone datos de TMDB.
+
+- Base: `https://api-cinemex-akd3btgfhsgnf5d5.northcentralus-01.azurewebsites.net/api/peliculas`
+- Documentación: [Swagger](https://api-cinemex-akd3btgfhsgnf5d5.northcentralus-01.azurewebsites.net/api/peliculas/swagger)
 
 | Funcionalidad | Endpoint | Dónde se usa |
 | --- | --- | --- |
-| Películas populares | `/3/movie/popular` | Cartelera → "Populares" (pantalla de inicio) |
-| En cartelera | `/3/movie/now_playing?region=MX` | Cartelera → "En cartelera" |
-| Próximos estrenos | `/3/movie/upcoming?region=MX` | Cartelera → "Próximamente" |
-| Buscar película | `/3/search/movie` | Barra de búsqueda |
-| Detalles de película | `/3/movie/{movie_id}?append_to_response=release_dates` | Pantalla de detalle (sinopsis, duración, géneros, póster, clasificación mexicana) |
-| Géneros | `/3/genre/movie/list` | Filtro por género y tabla `generos` de MySQL |
+| Películas populares | `GET /populares?page=n` | Cartelera → "Populares" (pantalla de inicio) |
+| En cartelera | `GET /cartelera?page=n` | Cartelera → "En cartelera" |
+| Próximos estrenos | `GET /proximos-estrenos?page=n` | Cartelera → "Próximamente" |
+| Detalles de película | `GET /{id}` | Pantalla de detalle (sinopsis, duración, géneros, cartel, clasificación) |
+| Buscar película | *(la API no lo tiene)* | `ClienteCinemexAPI.buscar` junta las películas de las tres listas y las filtra con `FiltroTitulo`, la clase del diseño |
+| Géneros | *(la API no lo tiene)* | `ClienteCinemexAPI.generos` arma el catálogo con los géneros de las películas y lo guarda en la tabla `generos` |
 
-- **Formato de las peticiones:**
-  - Todas llevan `language=es-MX`.
-  - La autenticación es con `Authorization: Bearer <token>`, o con `api_key` si no hay token.
-- **Pósters:** se construyen con `https://image.tmdb.org/t/p/w500` + `poster_path` y se descargan en segundo plano.
+**Cómo está hecho:**
+
+- **Una interfaz, dos fuentes.** Las pantallas solo conocen la interfaz **`IClientePeliculas`**, que tiene dos implementaciones:
+  - `ClienteCinemexAPI`: la API del grupo, la que se usa.
+  - `ClienteTMDB`: TMDB directo, con `/3/movie/popular`, `now_playing`, `upcoming`, `search/movie`, `/movie/{id}` y `genre/movie/list`.
+
+  Se elige con `peliculas.fuente` en `config.properties`, sin tocar la interfaz gráfica (polimorfismo).
 - **Paginación:** los botones "Anterior / Siguiente" piden la página correspondiente.
 - **No congela la interfaz:** todas las llamadas van en un `javafx.concurrent.Task` (clase `Tareas`).
-- **Errores:** sin internet, llave inválida, búsqueda sin resultados, 404 y 429 muestran un mensaje en pantalla, no una excepción.
-- **El JSON no llega a las vistas:** `ClienteTMDB` convierte los DTO a `POJOPelicula` y `POJOGenero`.
-- **TMDB vs. mi cine:** TMDB es el catálogo y MySQL es la cartelera del cine. El administrador **importa** la película (`ServicioPeliculas.guardar`) antes de programarle funciones. `tmdb_id` es `UNIQUE`: volver a importar actualiza la película y no la duplica.
+- **Errores:** sin internet, API caída (error 500), película no encontrada y búsqueda sin resultados muestran un mensaje en pantalla.
+- **El JSON no llega a las vistas:** el cliente convierte los DTO a `POJOPelicula` y `POJOGenero`.
+- **Catálogo vs. mi cine:** la API es el catálogo y MySQL es la cartelera del cine. El administrador **importa** la película (`ServicioPeliculas.guardar`) antes de programarle funciones. `tmdb_id` es `UNIQUE`: volver a importar actualiza la película y no la duplica.
 
 ---
 
@@ -190,7 +198,7 @@ Al programar cambiaron algunas cosas del diseño de la Entrega 1. Todas están r
 | 2 | Los paquetes se organizaron **por capa**: `modelo.*`, `servicio`, `controlador`, `tmdb`. Antes eran por módulo. | Para que la separación MVC se vea en la estructura. Dentro de `modelo` se conservan los módulos del diseño (usuarios, películas, cines, funciones, compras). |
 | 3 | `POJOPelicula` ahora tiene `tmdbId`, `posterPath`, `fechaEstreno`, `calificacion` y una **lista de `POJOGenero`**. Se quitaron `genero: String` y `director`. | El catálogo viene de TMDB: una película puede tener varios géneros, y el director no viene en `/movie/{id}`. Se agregó la clase **`POJOGenero`** con las tablas `generos` y `pelicula_genero`. |
 | 4 | `Clasificacion` agrega `SC` (sin clasificar). | TMDB no siempre trae la clasificación mexicana. El administrador la puede corregir. |
-| 5 | Paquete nuevo **`tmdb`**: `ClienteTMDB`, `PaginaPeliculas`, `ExcepcionTMDB` y los DTO (`PeliculaDTO`, `PaginaDTO`, etc.). | Consumir la API sin que el JSON llegue a las vistas, y soportar paginación. |
+| 5 | Paquetes nuevos para el catálogo: **`catalogo`** (interfaz `IClientePeliculas`, `PaginaPeliculas`, `ExcepcionCatalogo`), **`api`** (`ClienteCinemexAPI` y sus DTO) y **`tmdb`** (`ClienteTMDB` y sus DTO). | Consumir la API sin que el JSON llegue a las vistas, soportar paginación y poder cambiar de fuente sin tocar la interfaz gráfica. |
 | 6 | Los Servicios usan **MySQL** en lugar de listas en memoria. Se agregaron métodos para el CRUD completo: `actualizar`, `eliminar`, `eliminarSala`, `buscarPorTmdbId`, `sincronizarGeneros`, `listarCiudades`, `listarPorCineYDia`, `cargarOcupados`, `contarBoletos`, `registrarCliente`, `getClienteActual`. | Persistencia y operaciones CRUD desde la interfaz. |
 | 7 | `ServicioPeliculas.guardar` funciona como **importar desde TMDB**: inserta, o actualiza si el `tmdb_id` ya existe. | Regla del enunciado: no guardar la misma película dos veces. |
 | 8 | `ServicioCines.crearSala(...)` es la **fábrica** que decide qué subclase de sala crear. `agregarSala` guarda la sala con todos sus asientos. | Un solo lugar sabe qué subclase usar, tanto al leer de MySQL como en la pantalla de administración. |
@@ -202,6 +210,7 @@ Al programar cambiaron algunas cosas del diseño de la Entrega 1. Todas están r
 | 14 | Los Servicios lanzan **`ExcepcionCine`** con un mensaje para el usuario cuando se rompe una regla (siguen regresando `boolean` si todo sale bien). | Que la interfaz pueda mostrar *por qué* falló (por ejemplo "Se empalma con…"), no solo `false`. |
 | 15 | La compra `PENDIENTE` vive solo en memoria y se guarda en MySQL al pagar, dentro de una transacción. | RN06 y RNF04: no se aparta nada hasta pagar, y se guarda todo o nada. |
 | 16 | En la pantalla de compra se eligen primero los asientos y después los tipos de boleto. | Así funciona cinemex.com, como se ve en el análisis. |
+| 17 | El catálogo se obtiene de la **API de películas del grupo** en lugar de TMDB directo. Como esa API no tiene búsqueda ni lista de géneros, `ClienteCinemexAPI` los resuelve con los datos de las listas (búsqueda con `FiltroTitulo`). `ClienteTMDB` se conserva como alternativa. | Autorizado por el profesor. La interfaz `IClientePeliculas` permite cambiar de fuente sin modificar los controladores. |
 
 ---
 
@@ -213,4 +222,4 @@ Al programar cambiaron algunas cosas del diseño de la Entrega 1. Todas están r
 
 **This product uses the TMDB API but is not endorsed or certified by TMDB.**
 
-Catálogo, pósters y sinopsis: [The Movie Database (TMDB)](https://www.themoviedb.org/). Cinemex es una marca de su respectivo dueño; este es un proyecto escolar sin fines comerciales.
+Catálogo, pósters y sinopsis: [The Movie Database (TMDB)](https://www.themoviedb.org/), a través de la API de películas del grupo. Cinemex es una marca de su respectivo dueño; este es un proyecto escolar sin fines comerciales.

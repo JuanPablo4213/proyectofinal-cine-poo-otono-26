@@ -1,6 +1,8 @@
 package cinemex.tmdb;
 
 import cinemex.base.Config;
+import cinemex.catalogo.IClientePeliculas;
+import cinemex.catalogo.PaginaPeliculas;
 import cinemex.modelo.peliculas.Clasificacion;
 import cinemex.modelo.peliculas.POJOGenero;
 import cinemex.modelo.peliculas.POJOPelicula;
@@ -34,7 +36,7 @@ import java.util.Map;
  *
  * Estos métodos tardan (van a internet): los controladores los llaman en segundo plano.
  */
-public class ClienteTMDB {
+public class ClienteTMDB implements IClientePeliculas {
     private static final String URL_BASE = "https://api.themoviedb.org/3";
     private static final String IDIOMA = "es-MX";
     private static final String REGION = "MX";
@@ -62,21 +64,25 @@ public class ClienteTMDB {
     // ------------------------------------------------------- los 6 endpoints
 
     /** /3/movie/popular */
+    @Override
     public PaginaPeliculas populares(int pagina) {
         return lista("/movie/popular", parametros("page", pagina));
     }
 
     /** /3/movie/now_playing (región México) */
+    @Override
     public PaginaPeliculas enCartelera(int pagina) {
         return lista("/movie/now_playing", parametros("page", pagina, "region", REGION));
     }
 
     /** /3/movie/upcoming (región México) */
+    @Override
     public PaginaPeliculas proximosEstrenos(int pagina) {
         return lista("/movie/upcoming", parametros("page", pagina, "region", REGION));
     }
 
     /** /3/search/movie */
+    @Override
     public PaginaPeliculas buscar(String texto, int pagina) {
         if (texto == null || texto.isBlank()) {
             throw new ExcepcionTMDB("Escribe el título de una película para buscar.");
@@ -88,12 +94,14 @@ public class ClienteTMDB {
      * /3/movie/{movie_id}: sinopsis, duración, géneros, póster y clasificación.
      * Con append_to_response=release_dates viene la clasificación de cada país; usamos la de México.
      */
+    @Override
     public POJOPelicula detalle(int tmdbId) {
         String json = get("/movie/" + tmdbId, parametros("append_to_response", "release_dates"));
         return convertirDetalle(json);
     }
 
     /** /3/genre/movie/list */
+    @Override
     public List<POJOGenero> generos() {
         String json = get("/genre/movie/list", parametros());
         GenerosDTO dto = leer(json, GenerosDTO.class);
@@ -108,6 +116,11 @@ public class ClienteTMDB {
         }
         _generos = cache;
         return lista;
+    }
+
+    @Override
+    public String getNombre() {
+        return "TMDB";
     }
 
     // ------------------------------------------------------- conversión JSON -> modelo

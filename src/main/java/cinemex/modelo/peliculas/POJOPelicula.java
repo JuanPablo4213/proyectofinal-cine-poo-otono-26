@@ -43,9 +43,15 @@ public class POJOPelicula {
         return _id > 0;
     }
 
-    /** URL completa del póster (base de TMDB + poster_path), o null si no tiene. */
+    /**
+     * URL completa del póster, o null si no tiene. La API del grupo ya manda la URL completa;
+     * TMDB manda solo el poster_path ("/abc.jpg") y hay que ponerle la base.
+     */
     public String getUrlPoster() {
-        return (_posterPath == null || _posterPath.isBlank()) ? null : URL_POSTER + _posterPath;
+        if (_posterPath == null || _posterPath.isBlank()) {
+            return null;
+        }
+        return _posterPath.startsWith("http") ? _posterPath : URL_POSTER + _posterPath;
     }
 
     public String getGenerosTexto() {

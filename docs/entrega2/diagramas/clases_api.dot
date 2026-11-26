@@ -1,0 +1,21 @@
+digraph G {
+graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagrama de clases – módulo cinemex.api", labelloc=t, fontsize=18, pad=0.3];
+node [shape=plain, fontname="Helvetica", fontsize=10];
+edge [fontname="Helvetica", fontsize=9];
+"ClienteCinemexAPI" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E1F5FE"><B>ClienteCinemexAPI</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _urlBase: String<BR ALIGN="LEFT"/>- _http: HttpClient<BR ALIGN="LEFT"/>- _gson: Gson<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ populares(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ enCartelera(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ proximosEstrenos(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ buscar(texto, pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ detalle(id): POJOPelicula<BR ALIGN="LEFT"/>+ generos(): List&lt;POJOGenero&gt;<BR ALIGN="LEFT"/>- todasLasListas(): List&lt;POJOPelicula&gt;<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+"PeliculaApiDTO" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E1F5FE"><B>PeliculaApiDTO</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ id, titulo, sinopsis, fechaEstreno, duracion<BR ALIGN="LEFT"/>+ generos, clasificacion, cartel, calificacion, estado<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR></TABLE>>];
+"PaginaApiDTO" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E1F5FE"><B>PaginaApiDTO</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ pagina: int<BR ALIGN="LEFT"/>+ totalPaginas: int<BR ALIGN="LEFT"/>+ totalResultados: int<BR ALIGN="LEFT"/>+ peliculas: List&lt;PeliculaApiDTO&gt;<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR></TABLE>>];
+"ErrorApiDTO" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E1F5FE"><B>ErrorApiDTO</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ status: int<BR ALIGN="LEFT"/>+ error: String<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR></TABLE>>];
+"POJOPelicula" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFF3E0" STYLE="dashed">POJOPelicula<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.peliculas)</FONT></TD></TR></TABLE>>];
+"FiltroTitulo" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFF3E0" STYLE="dashed">FiltroTitulo<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.peliculas)</FONT></TD></TR></TABLE>>];
+"PaginaPeliculas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FCE4EC" STYLE="dashed">PaginaPeliculas<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.catalogo)</FONT></TD></TR></TABLE>>];
+"IClientePeliculas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FCE4EC" STYLE="dashed"><FONT POINT-SIZE="8">«interface» </FONT>IClientePeliculas<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.catalogo)</FONT></TD></TR></TABLE>>];
+"ExcepcionCatalogo" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FCE4EC" STYLE="dashed">ExcepcionCatalogo<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.catalogo)</FONT></TD></TR></TABLE>>];
+"ClienteCinemexAPI" -> "IClientePeliculas" [arrowhead=empty, style=dashed];
+"ClienteCinemexAPI" -> "PaginaPeliculas" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="regresa"];
+"ClienteCinemexAPI" -> "PeliculaApiDTO" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="lee JSON"];
+"ClienteCinemexAPI" -> "POJOPelicula" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="convierte a"];
+"ClienteCinemexAPI" -> "FiltroTitulo" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="buscar()"];
+"ClienteCinemexAPI" -> "ExcepcionCatalogo" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="lanza"];
+"PaginaApiDTO" -> "PeliculaApiDTO" [arrowhead=vee, headlabel="0..*"];
+}

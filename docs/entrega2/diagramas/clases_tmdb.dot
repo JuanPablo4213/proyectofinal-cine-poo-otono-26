@@ -3,18 +3,18 @@ graph [rankdir=BT, nodesep=0.4, ranksep=0.7, fontname="Helvetica", label="Diagra
 node [shape=plain, fontname="Helvetica", fontsize=10];
 edge [fontname="Helvetica", fontsize=9];
 "ClienteTMDB" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E0F7FA"><B>ClienteTMDB</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _http: HttpClient<BR ALIGN="LEFT"/>- _gson: Gson<BR ALIGN="LEFT"/>- _token: String<BR ALIGN="LEFT"/>- _apiKey: String<BR ALIGN="LEFT"/>- _generos: Map&lt;Integer,POJOGenero&gt;<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ populares(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ enCartelera(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ proximosEstrenos(pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ buscar(texto, pagina): PaginaPeliculas<BR ALIGN="LEFT"/>+ detalle(tmdbId): POJOPelicula<BR ALIGN="LEFT"/>+ generos(): List&lt;POJOGenero&gt;<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
-"PaginaPeliculas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E0F7FA"><B>PaginaPeliculas</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _pagina: int<BR ALIGN="LEFT"/>- _totalPaginas: int<BR ALIGN="LEFT"/>- _totalResultados: int<BR ALIGN="LEFT"/>- _peliculas: List&lt;POJOPelicula&gt;<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ tieneAnterior(): boolean<BR ALIGN="LEFT"/>+ tieneSiguiente(): boolean<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 "PeliculaDTO" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E0F7FA"><B>PeliculaDTO</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ id, title, overview, posterPath, releaseDate<BR ALIGN="LEFT"/>+ voteAverage, genreIds, runtime, genres, releaseDates<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR></TABLE>>];
 "PaginaDTO" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E0F7FA"><B>PaginaDTO</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ page: int<BR ALIGN="LEFT"/>+ totalPages: int<BR ALIGN="LEFT"/>+ totalResults: int<BR ALIGN="LEFT"/>+ results: List&lt;PeliculaDTO&gt;<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR></TABLE>>];
 "ExcepcionTMDB" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#E0F7FA"><B>ExcepcionTMDB</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"> </TD></TR></TABLE>>];
-"ExcepcionCine" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#ECEFF1" STYLE="dashed">ExcepcionCine<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex (+ cinemex.base))</FONT></TD></TR></TABLE>>];
 "POJOPelicula" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFF3E0" STYLE="dashed">POJOPelicula<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.modelo.peliculas)</FONT></TD></TR></TABLE>>];
-"Contexto" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#EDE7F6" STYLE="dashed">Contexto<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.controlador)</FONT></TD></TR></TABLE>>];
-"ExcepcionTMDB" -> "ExcepcionCine" [arrowhead=empty, style=solid];
+"PaginaPeliculas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FCE4EC" STYLE="dashed">PaginaPeliculas<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.catalogo)</FONT></TD></TR></TABLE>>];
+"IClientePeliculas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FCE4EC" STYLE="dashed"><FONT POINT-SIZE="8">«interface» </FONT>IClientePeliculas<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.catalogo)</FONT></TD></TR></TABLE>>];
+"ExcepcionCatalogo" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FCE4EC" STYLE="dashed">ExcepcionCatalogo<BR/><FONT POINT-SIZE="8" COLOR="#666666">(cinemex.catalogo)</FONT></TD></TR></TABLE>>];
+"ExcepcionTMDB" -> "ExcepcionCatalogo" [arrowhead=empty, style=solid];
+"ClienteTMDB" -> "IClientePeliculas" [arrowhead=empty, style=dashed];
 "ClienteTMDB" -> "PaginaPeliculas" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="regresa"];
 "ClienteTMDB" -> "PeliculaDTO" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="lee JSON"];
 "ClienteTMDB" -> "POJOPelicula" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="convierte a"];
 "ClienteTMDB" -> "ExcepcionTMDB" [arrowhead=vee, style=dashed, color="#777777", fontcolor="#777777", label="lanza"];
 "PaginaDTO" -> "PeliculaDTO" [arrowhead=vee, headlabel="0..*"];
-"Contexto" -> "ClienteTMDB" [arrowhead=vee, headlabel="1"];
 }

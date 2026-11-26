@@ -8,7 +8,7 @@
            fx:controller="cinemex.controlador.AcercaDeControlador">
     <VBox spacing="16" styleClass="panel" maxWidth="720" maxHeight="520" alignment="TOP_LEFT">
         <Label text="Acerca de" styleClass="titulo-pantalla"/>
-        <Label wrapText="true" text="Clon de Cinemex hecho en Java con JavaFX (patrón MVC), MySQL y la API de The Movie Database. Proyecto final de Programación Orientada a Objetos, Universidad Iberoamericana, Otoño 2026."/>
+        <Label wrapText="true" text="Clon de Cinemex hecho en Java con JavaFX (patrón MVC), MySQL y la API de películas del grupo (que obtiene sus datos de The Movie Database). Proyecto final de Programación Orientada a Objetos, Universidad Iberoamericana, Otoño 2026."/>
         <Label text="Juan Pablo Flores · Ingeniería en Ciencia de Datos" styleClass="texto-suave"/>
         <Separator/>
         <Label text="Datos de películas" styleClass="subtitulo"/>

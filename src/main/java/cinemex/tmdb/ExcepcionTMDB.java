@@ -1,9 +1,9 @@
 package cinemex.tmdb;
 
-import cinemex.base.ExcepcionCine;
+import cinemex.catalogo.ExcepcionCatalogo;
 
 /** Error al hablar con TMDB, con un mensaje entendible para el usuario. */
-public class ExcepcionTMDB extends ExcepcionCine {
+public class ExcepcionTMDB extends ExcepcionCatalogo {
     public ExcepcionTMDB(String mensaje) {
         super(mensaje);
     }

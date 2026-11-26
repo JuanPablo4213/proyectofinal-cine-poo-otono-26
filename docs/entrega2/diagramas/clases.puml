@@ -279,6 +279,55 @@ package cinemex.servicio {
     + listarPorCliente(c): List<POJOCompra>
   }
 }
+package cinemex.catalogo {
+  class PaginaPeliculas {
+    - _pagina: int
+    - _totalPaginas: int
+    - _totalResultados: int
+    - _peliculas: List<POJOPelicula>
+    + tieneAnterior(): boolean
+    + tieneSiguiente(): boolean
+  }
+  interface IClientePeliculas {
+    + populares(pagina): PaginaPeliculas
+    + enCartelera(pagina): PaginaPeliculas
+    + proximosEstrenos(pagina): PaginaPeliculas
+    + buscar(texto, pagina): PaginaPeliculas
+    + detalle(id): POJOPelicula
+    + generos(): List<POJOGenero>
+    + getNombre(): String
+  }
+  class ExcepcionCatalogo {
+  }
+}
+package cinemex.api {
+  class ClienteCinemexAPI {
+    - _urlBase: String
+    - _http: HttpClient
+    - _gson: Gson
+    + populares(pagina): PaginaPeliculas
+    + enCartelera(pagina): PaginaPeliculas
+    + proximosEstrenos(pagina): PaginaPeliculas
+    + buscar(texto, pagina): PaginaPeliculas
+    + detalle(id): POJOPelicula
+    + generos(): List<POJOGenero>
+    - todasLasListas(): List<POJOPelicula>
+  }
+  class PeliculaApiDTO {
+    + id, titulo, sinopsis, fechaEstreno, duracion
+    + generos, clasificacion, cartel, calificacion, estado
+  }
+  class PaginaApiDTO {
+    + pagina: int
+    + totalPaginas: int
+    + totalResultados: int
+    + peliculas: List<PeliculaApiDTO>
+  }
+  class ErrorApiDTO {
+    + status: int
+    + error: String
+  }
+}
 package cinemex.tmdb {
   class ClienteTMDB {
     - _http: HttpClient
@@ -292,14 +341,6 @@ package cinemex.tmdb {
     + buscar(texto, pagina): PaginaPeliculas
     + detalle(tmdbId): POJOPelicula
     + generos(): List<POJOGenero>
-  }
-  class PaginaPeliculas {
-    - _pagina: int
-    - _totalPaginas: int
-    - _totalResultados: int
-    - _peliculas: List<POJOPelicula>
-    + tieneAnterior(): boolean
-    + tieneSiguiente(): boolean
   }
   class PeliculaDTO {
     + id, title, overview, posterPath, releaseDate
@@ -317,10 +358,10 @@ package cinemex.tmdb {
 package cinemex.controlador {
   class Contexto {
     - servicios (5)
-    - _tmdb: ClienteTMDB
+    - _catalogo: IClientePeliculas
     - _navegador: Navegador
     + usuarios() ... compras(): Servicio
-    + tmdb(): ClienteTMDB
+    + catalogo(): IClientePeliculas
   }
   class Navegador {
     - _historial: Deque<Parent>
@@ -374,7 +415,17 @@ IFiltroPelicula <|.. FiltroGenero
 IFiltroPelicula <|.. FiltroClasificacion
 IMetodoPago <|.. PagoTarjeta
 IMetodoPago <|.. PagoPayPal
-ExcepcionCine <|-- ExcepcionTMDB
+ExcepcionCatalogo <|-- ExcepcionTMDB
+ExcepcionCine <|-- ExcepcionCatalogo
+IClientePeliculas <|.. ClienteTMDB
+IClientePeliculas <|.. ClienteCinemexAPI
+ClienteCinemexAPI ..> PaginaPeliculas : regresa
+ClienteCinemexAPI ..> PeliculaApiDTO : lee JSON
+ClienteCinemexAPI ..> POJOPelicula : convierte a
+ClienteCinemexAPI ..> FiltroTitulo : buscar()
+ClienteCinemexAPI ..> ExcepcionCatalogo : lanza
+PaginaApiDTO --> "0..*" PeliculaApiDTO
+IClientePeliculas ..> PaginaPeliculas : regresa
 ControladorBase <|-- CarteleraControlador
 ControladorBase <|-- DetalleControlador
 ControladorBase <|-- CompraControlador
@@ -413,7 +464,7 @@ ClienteTMDB ..> PeliculaDTO : lee JSON
 ClienteTMDB ..> POJOPelicula : convierte a
 ClienteTMDB ..> ExcepcionTMDB : lanza
 PaginaDTO --> "0..*" PeliculaDTO
-Contexto --> "1" ClienteTMDB
+Contexto --> "1" IClientePeliculas : catalogo
 Contexto --> "1" Navegador
 ControladorBase --> "1" Contexto : ctx
 ControladorBase ..> Tareas : usa

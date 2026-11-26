@@ -12,7 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
- * Detalle de una película (/3/movie/{id}). Si el administrador la importa, se guarda
+ * Detalle de una película (GET /{id} del catálogo). Si el administrador la importa, se guarda
  * en MySQL y ya se le pueden programar funciones; el cliente ve aquí las funciones y compra.
  */
 public class DetalleControlador extends ControladorBase {
@@ -29,7 +29,7 @@ public class DetalleControlador extends ControladorBase {
     @FXML private ProgressIndicator progreso;
 
     private int _tmdbId;
-    private POJOPelicula _peliculaTMDB;   // lo que regresó TMDB
+    private POJOPelicula _peliculaTMDB;   // lo que regresó el catálogo (API)
     private POJOPelicula _peliculaLocal;  // la de MySQL, si ya está importada
 
     public void setTmdbId(int tmdbId) {
@@ -60,10 +60,10 @@ public class DetalleControlador extends ControladorBase {
             lblEstado.setText("Sin conexión a MySQL: " + e.getMessage());
         }
         if (_peliculaLocal != null) {
-            mostrar(_peliculaLocal);   // se ve algo de inmediato mientras responde TMDB
+            mostrar(_peliculaLocal);   // se ve algo de inmediato mientras responde la API
         }
         progreso.setVisible(true);
-        enSegundoPlano(() -> ctx.tmdb().detalle(_tmdbId), p -> {
+        enSegundoPlano(() -> ctx.catalogo().detalle(_tmdbId), p -> {
             progreso.setVisible(false);
             _peliculaTMDB = p;
             if (_peliculaLocal != null) {
@@ -106,7 +106,7 @@ public class DetalleControlador extends ControladorBase {
         boolean importada = _peliculaLocal != null;
         btnImportar.setVisible(admin && _peliculaTMDB != null);
         btnImportar.setManaged(admin && _peliculaTMDB != null);
-        btnImportar.setText(importada ? "Actualizar datos desde TMDB" : "Importar a mi cine");
+        btnImportar.setText(importada ? "Actualizar datos desde la API" : "Importar a mi cine");
         panelFunciones.setVisible(importada);
         panelFunciones.setManaged(importada);
         if (!lblEstado.getStyleClass().contains("mensaje-error")) {

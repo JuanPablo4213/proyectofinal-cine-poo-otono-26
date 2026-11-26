@@ -1,6 +1,9 @@
 package cinemex;
 
+import cinemex.api.ClienteCinemexAPI;
+import cinemex.base.Config;
 import cinemex.base.ConexionBD;
+import cinemex.catalogo.IClientePeliculas;
 import cinemex.controlador.Contexto;
 import cinemex.controlador.Navegador;
 import cinemex.servicio.ServicioCines;
@@ -31,7 +34,12 @@ public class App extends Application {
         ServicioFunciones funciones = new ServicioFunciones(peliculas, cines);
         ServicioCompras compras = new ServicioCompras(funciones);
 
-        Contexto ctx = new Contexto(usuarios, peliculas, cines, funciones, compras, ClienteTMDB.desdeConfig());
+        // Fuente del catálogo: la API del grupo (por defecto) o TMDB directo (peliculas.fuente=tmdb)
+        IClientePeliculas catalogo = "tmdb".equalsIgnoreCase(Config.get("peliculas.fuente"))
+                ? ClienteTMDB.desdeConfig()
+                : ClienteCinemexAPI.desdeConfig();
+
+        Contexto ctx = new Contexto(usuarios, peliculas, cines, funciones, compras, catalogo);
         new Navegador(ventana, ctx).iniciar();
     }
 
