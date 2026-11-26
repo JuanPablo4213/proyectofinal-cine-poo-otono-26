@@ -26,10 +26,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-/**
- * Compra de boletos (diagramas de actividades 2 y de secuencia):
- * mapa de asientos -> tipos de boleto -> pago -> ServicioCompras.confirmarCompra.
- */
 public class CompraControlador extends ControladorBase {
     @FXML private StackPane contPoster;
     @FXML private Label lblTitulo;
@@ -100,7 +96,6 @@ public class CompraControlador extends ControladorBase {
         actualizarResumen();
     }
 
-    /** Un botón por asiento: filas = letras, columnas = números. Los vendidos salen deshabilitados. */
     private void dibujarMapa() {
         mapa.getChildren().clear();
         _botones.clear();
@@ -121,7 +116,7 @@ public class CompraControlador extends ControladorBase {
                 } else {
                     b.setOnAction(e -> alternar(a, b));
                 }
-                // un pasillo a la mitad, como en las salas reales
+
                 int columna = c > sala.getColumnas() / 2 ? c + 1 : c;
                 mapa.add(b, columna, f);
                 _botones.add(b);
@@ -138,7 +133,7 @@ public class CompraControlador extends ControladorBase {
                 return;
             }
             _seleccionados.add(a);
-            // por comodidad: cada asiento nuevo cuenta como adulto
+
             spAdulto.getValueFactory().setValue(Math.min(POJOCompra.MAX_BOLETOS,
                     _seleccionados.size() - spNino.getValue() - spMayor.getValue()));
         } else {
@@ -148,7 +143,6 @@ public class CompraControlador extends ControladorBase {
         actualizarResumen();
     }
 
-    /** Si quitan asientos, se quitan boletos (primero adultos) para que cuadre. */
     private void ajustarTipos() {
         int sobran = spAdulto.getValue() + spNino.getValue() + spMayor.getValue() - _seleccionados.size();
         for (Spinner<Integer> s : List.of(spAdulto, spNino, spMayor)) {
@@ -184,7 +178,6 @@ public class CompraControlador extends ControladorBase {
         panelPayPal.setManaged(!tarjeta);
     }
 
-    /** Arma la compra con ServicioCompras y la confirma (todo o nada). */
     @FXML
     private void pagar() {
         try {
@@ -204,7 +197,7 @@ public class CompraControlador extends ControladorBase {
             ctx.navegador().ir("mis-compras");
         } catch (ExcepcionCine e) {
             mostrarError(e);
-            // si otro cliente ganó un asiento, se vuelve a dibujar el mapa con lo ocupado
+
             ctx.funciones().cargarOcupados(_funcion);
             dibujarMapa();
             actualizarResumen();

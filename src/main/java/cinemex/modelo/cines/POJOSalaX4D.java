@@ -2,7 +2,6 @@ package cinemex.modelo.cines;
 
 import cinemex.modelo.compras.TipoBoleto;
 
-/** Sala con efectos: al precio se le suma un cargo por efectos. */
 public class POJOSalaX4D extends POJOSala {
     private static final double PRECIO_BASE = 120;
     private double _cargoEfectos;

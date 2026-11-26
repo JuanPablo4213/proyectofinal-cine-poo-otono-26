@@ -30,12 +30,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Cliente de The Movie Database. Hace las peticiones con HttpClient, convierte el JSON
- * con Gson y regresa objetos del MODELO (POJOPelicula, POJOGenero): el JSON nunca llega a las vistas.
- *
- * Estos métodos tardan (van a internet): los controladores los llaman en segundo plano.
- */
 public class ClienteTMDB implements IClientePeliculas {
     private static final String URL_BASE = "https://api.themoviedb.org/3";
     private static final String IDIOMA = "es-MX";
@@ -45,7 +39,7 @@ public class ClienteTMDB implements IClientePeliculas {
     private final Gson _gson;
     private final String _token;
     private final String _apiKey;
-    private Map<Integer, POJOGenero> _generos;   // caché: id -> género
+    private Map<Integer, POJOGenero> _generos;
 
     public ClienteTMDB(String token, String apiKey) {
         this._token = token == null ? "" : token.trim();
@@ -56,32 +50,25 @@ public class ClienteTMDB implements IClientePeliculas {
                 .create();
     }
 
-    /** Lee tmdb.token / tmdb.apiKey de config.properties. */
     public static ClienteTMDB desdeConfig() {
         return new ClienteTMDB(Config.get("tmdb.token"), Config.get("tmdb.apiKey"));
     }
 
-    // ------------------------------------------------------- los 6 endpoints
-
-    /** /3/movie/popular */
     @Override
     public PaginaPeliculas populares(int pagina) {
         return lista("/movie/popular", parametros("page", pagina));
     }
 
-    /** /3/movie/now_playing (región México) */
     @Override
     public PaginaPeliculas enCartelera(int pagina) {
         return lista("/movie/now_playing", parametros("page", pagina, "region", REGION));
     }
 
-    /** /3/movie/upcoming (región México) */
     @Override
     public PaginaPeliculas proximosEstrenos(int pagina) {
         return lista("/movie/upcoming", parametros("page", pagina, "region", REGION));
     }
 
-    /** /3/search/movie */
     @Override
     public PaginaPeliculas buscar(String texto, int pagina) {
         if (texto == null || texto.isBlank()) {
@@ -90,17 +77,12 @@ public class ClienteTMDB implements IClientePeliculas {
         return lista("/search/movie", parametros("query", texto.trim(), "page", pagina, "include_adult", "false"));
     }
 
-    /**
-     * /3/movie/{movie_id}: sinopsis, duración, géneros, póster y clasificación.
-     * Con append_to_response=release_dates viene la clasificación de cada país; usamos la de México.
-     */
     @Override
     public POJOPelicula detalle(int tmdbId) {
         String json = get("/movie/" + tmdbId, parametros("append_to_response", "release_dates"));
         return convertirDetalle(json);
     }
 
-    /** /3/genre/movie/list */
     @Override
     public List<POJOGenero> generos() {
         String json = get("/genre/movie/list", parametros());
@@ -122,8 +104,6 @@ public class ClienteTMDB implements IClientePeliculas {
     public String getNombre() {
         return "TMDB";
     }
-
-    // ------------------------------------------------------- conversión JSON -> modelo
 
     PaginaPeliculas convertirPagina(String json) {
         PaginaDTO dto = leer(json, PaginaDTO.class);
@@ -166,7 +146,6 @@ public class ClienteTMDB implements IClientePeliculas {
         return p;
     }
 
-    /** Busca la certificación de México (iso_3166_1 = "MX") entre las fechas de estreno. */
     private Clasificacion clasificacionMexico(ReleaseDatesDTO fechas) {
         if (fechas == null || fechas.results == null) {
             return Clasificacion.SC;
@@ -192,12 +171,10 @@ public class ClienteTMDB implements IClientePeliculas {
         }
     }
 
-    // ------------------------------------------------------- HTTP
-
     private PaginaPeliculas lista(String ruta, Map<String, String> params) {
         if (_generos == null) {
             try {
-                generos();   // para poder ponerle nombre a los genre_ids de cada película
+                generos();
             } catch (ExcepcionTMDB e) {
                 _generos = Map.of();
             }
@@ -205,7 +182,6 @@ public class ClienteTMDB implements IClientePeliculas {
         return convertirPagina(get(ruta, params));
     }
 
-    /** Arma la URL, hace el GET y traduce los errores a mensajes para el usuario. */
     private String get(String ruta, Map<String, String> params) {
         if (_token.isEmpty() && _apiKey.isEmpty()) {
             throw new ExcepcionTMDB("Falta tu llave de TMDB en config.properties (tmdb.token o tmdb.apiKey).");

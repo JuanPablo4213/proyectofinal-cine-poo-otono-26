@@ -8,10 +8,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 
-/**
- * CRUD de la cartelera local. Alta = importar desde TMDB (pantalla de detalle);
- * aquí se consulta, se modifica (clasificación, en cartelera) y se elimina.
- */
 public class AdminPeliculasControlador extends ControladorBase {
     @FXML private TableView<POJOPelicula> tabla;
     @FXML private ComboBox<Clasificacion> cmbClasificacion;

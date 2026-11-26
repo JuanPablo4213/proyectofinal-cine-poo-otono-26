@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** El cerebro del flujo de compra: iniciar, agregar boletos, pagar y cancelar. */
 public class ServicioCompras extends BaseServicio {
     public static final int MAX_BOLETOS = POJOCompra.MAX_BOLETOS;
 
@@ -30,7 +29,6 @@ public class ServicioCompras extends BaseServicio {
         this._funciones = funciones;
     }
 
-    /** Crea la compra en estado PENDIENTE (todavía no aparta asientos, RN06). */
     public POJOCompra iniciarCompra(POJOCliente c, POJOFuncion f) {
         if (c == null) {
             throw new ExcepcionCine("Inicia sesión como cliente para comprar boletos.");
@@ -44,7 +42,6 @@ public class ServicioCompras extends BaseServicio {
         return new POJOCompra(0, c, f);
     }
 
-    /** Revisa que el asiento esté libre, le pide el precio a la sala (polimorfismo) y lo agrega. */
     public boolean agregarBoleto(POJOCompra compra, POJOAsiento a, TipoBoleto tipo) {
         if (compra.getEstado() != EstadoCompra.PENDIENTE) {
             throw new ExcepcionCine("La compra ya no se puede modificar.");
@@ -60,10 +57,6 @@ public class ServicioCompras extends BaseServicio {
         return compra.agregarBoleto(new POJOBoleto(0, f, a, tipo, precio));
     }
 
-    /**
-     * Paga la compra. Solo si el pago es válido se ocupan los asientos (RN06), y todo
-     * se guarda en una transacción: o se guardan todos los boletos o ninguno (RNF04).
-     */
     public boolean confirmarCompra(POJOCompra compra, IMetodoPago m) {
         if (compra.getEstado() != EstadoCompra.PENDIENTE || compra.getBoletos().isEmpty()) {
             throw new ExcepcionCine("Selecciona al menos un asiento.");
@@ -75,7 +68,7 @@ public class ServicioCompras extends BaseServicio {
         if (f.yaEmpezo()) {
             throw new ExcepcionCine("La función ya empezó.");
         }
-        // Se vuelve a leer qué está ocupado: otro cliente pudo pagar mientras elegíamos (RN01)
+
         _funciones.cargarOcupados(f);
         for (POJOBoleto b : compra.getBoletos()) {
             if (!f.estaDisponible(b.getAsiento())) {
@@ -125,7 +118,6 @@ public class ServicioCompras extends BaseServicio {
             rollback(c);
             compra.setId(0);
             if (esErrorIntegridad(e)) {
-                // la llave única (funcion, asiento, vigente) evitó vender un asiento dos veces
                 throw new ExcepcionCine("Uno de tus asientos lo acaba de comprar otra persona. Elige otro.");
             }
             throw errorBD(e);
@@ -141,7 +133,6 @@ public class ServicioCompras extends BaseServicio {
         return true;
     }
 
-    /** Solo compras pagadas y antes de que empiece la función (RN08). Libera los asientos. */
     public boolean cancelar(int id) {
         POJOCompra compra = buscarPorId(id);
         if (compra == null) {
@@ -183,12 +174,9 @@ public class ServicioCompras extends BaseServicio {
         return r.isEmpty() ? null : r.get(0);
     }
 
-    /** Historial del cliente ("Mis compras"), las más recientes primero. */
     public List<POJOCompra> listarPorCliente(POJOCliente c) {
         return consultar("SELECT * FROM compras WHERE usuario_id = ? ORDER BY fecha DESC", c, c.getId());
     }
-
-    // ------------------------------------------------------------------ privados
 
     private List<POJOCompra> consultar(String sql, POJOCliente cliente, Object... params) {
         List<POJOCompra> lista = new ArrayList<>();
@@ -225,7 +213,7 @@ public class ServicioCompras extends BaseServicio {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     POJOAsiento a = new POJOAsiento(rs.getInt("asiento_id"), rs.getString("fila").charAt(0), rs.getInt("numero"));
-                    // se agrega directo a la lista: estos boletos ya existen, no pasan por la validación
+
                     compra.getBoletos().add(new POJOBoleto(rs.getInt("id"), compra.getFuncion(), a,
                             TipoBoleto.valueOf(rs.getString("tipo")), rs.getDouble("precio")));
                 }

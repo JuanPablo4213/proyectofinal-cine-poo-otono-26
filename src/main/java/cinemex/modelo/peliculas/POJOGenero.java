@@ -1,6 +1,5 @@
 package cinemex.modelo.peliculas;
 
-/** Género de película. El id es el mismo que usa TMDB. */
 public class POJOGenero {
     private int _id;
     private String _nombre;

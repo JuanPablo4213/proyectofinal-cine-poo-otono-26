@@ -1,6 +1,5 @@
 package cinemex.modelo.compras;
 
-/** Tipo de boleto. Niño y Adulto mayor pagan 30% menos (RN07). */
 public enum TipoBoleto {
     ADULTO("Adulto", 1.0),
     NINO("Niño", 0.7),
@@ -14,7 +13,6 @@ public enum TipoBoleto {
         this._factor = factor;
     }
 
-    /** Multiplicador del precio base: 1.0 = precio completo, 0.7 = 30% de descuento. */
     public double getFactor() { return _factor; }
 
     @Override

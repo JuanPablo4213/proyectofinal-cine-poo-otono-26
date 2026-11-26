@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-/** Formatos de fecha, hora y dinero en español para mostrar en pantalla. */
 public final class Formatos {
     private static final Locale MX = Locale.forLanguageTag("es-MX");
     private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("EEE d 'de' MMM yyyy", MX);

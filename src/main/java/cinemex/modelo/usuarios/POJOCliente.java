@@ -1,6 +1,5 @@
 package cinemex.modelo.usuarios;
 
-/** Cliente registrado: puede comprar boletos. */
 public class POJOCliente extends POJOUsuario {
     private String _telefono;
 

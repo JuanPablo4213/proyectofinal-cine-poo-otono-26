@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** Una compra de 1 a 10 boletos de la misma función (RN04). Se compone de sus boletos. */
 public class POJOCompra {
     public static final int MAX_BOLETOS = 10;
 
@@ -30,7 +29,6 @@ public class POJOCompra {
         this._fecha = LocalDateTime.now();
     }
 
-    /** false si ya hay 10, si es de otra función o si el asiento ya está en esta compra. */
     public boolean agregarBoleto(POJOBoleto b) {
         if (_boletos.size() >= MAX_BOLETOS || b.getFuncion() != _funcion || tieneAsiento(b.getAsiento())) {
             return false;
@@ -39,7 +37,6 @@ public class POJOCompra {
         return true;
     }
 
-    /** ¿Ya escogí esa silla en esta misma compra? */
     public boolean tieneAsiento(POJOAsiento a) {
         for (POJOBoleto b : _boletos) {
             if (b.getAsiento().equals(a)) {
@@ -49,7 +46,6 @@ public class POJOCompra {
         return false;
     }
 
-    /** Suma de los precios de todos los boletos. */
     public double calcularTotal() {
         double total = 0;
         for (POJOBoleto b : _boletos) {

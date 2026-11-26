@@ -10,7 +10,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 
-/** Cartelera de un cine en un día: ciudad -> cine -> día -> horarios (actividad 1 del diseño). */
 public class MiCineControlador extends ControladorBase {
     @FXML private ComboBox<String> cmbCiudad;
     @FXML private ComboBox<POJOCine> cmbCine;

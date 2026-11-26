@@ -17,10 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Cines, sus salas y sus asientos. */
 public class ServicioCines extends BaseServicio {
-
-    /** Nuevo (id = 0) o actualizar (id > 0). */
     public boolean guardar(POJOCine obj) {
         String nombre = requerido(obj.getNombre(), "Nombre");
         String ciudad = requerido(obj.getCiudad(), "Ciudad");
@@ -50,7 +47,6 @@ public class ServicioCines extends BaseServicio {
         }
     }
 
-    /** Borra el cine con sus salas (composición). Falla si alguna sala tiene funciones. */
     public boolean eliminar(int id) {
         try (PreparedStatement ps = con().prepareStatement("DELETE FROM cines WHERE id = ?")) {
             ps.setInt(1, id);
@@ -89,10 +85,6 @@ public class ServicioCines extends BaseServicio {
         return ciudades;
     }
 
-    /**
-     * Fábrica de salas: el ÚNICO lugar que sabe qué subclase crear según el tipo.
-     * Lo usan la pantalla de administración y la lectura desde MySQL.
-     */
     public POJOSala crearSala(String tipo, int id, int cineId, int numero, int filas, int columnas, double cargoEfectos) {
         if (filas < 1 || filas > 26 || columnas < 1 || columnas > 30) {
             throw new ExcepcionCine("Una sala debe tener de 1 a 26 filas y de 1 a 30 columnas.");
@@ -107,7 +99,6 @@ public class ServicioCines extends BaseServicio {
         }
     }
 
-    /** Guarda la sala con todos sus asientos en una sola transacción. */
     public boolean agregarSala(POJOCine cine, POJOSala sala) {
         if (!cine.agregarSala(sala)) {
             throw new ExcepcionCine("El cine ya tiene una sala " + sala.getNumero() + ".");
@@ -153,7 +144,6 @@ public class ServicioCines extends BaseServicio {
         }
     }
 
-    /** Borra la sala y sus asientos. Falla si tiene funciones. */
     public boolean eliminarSala(int salaId) {
         try (PreparedStatement ps = con().prepareStatement("DELETE FROM salas WHERE id = ?")) {
             ps.setInt(1, salaId);
@@ -166,7 +156,6 @@ public class ServicioCines extends BaseServicio {
         }
     }
 
-    /** Reemplaza los asientos generados en memoria por los de MySQL (con su id real). */
     public void cargarAsientos(POJOSala sala) {
         List<POJOAsiento> asientos = new ArrayList<>();
         String sql = "SELECT id, fila, numero FROM asientos WHERE sala_id = ? ORDER BY fila, numero";
@@ -182,8 +171,6 @@ public class ServicioCines extends BaseServicio {
         }
         sala.setAsientos(asientos);
     }
-
-    // ------------------------------------------------------------------ privados
 
     private List<POJOCine> consultar(String sql, Object... params) {
         Map<Integer, POJOCine> cines = new LinkedHashMap<>();

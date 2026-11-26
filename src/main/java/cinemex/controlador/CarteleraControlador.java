@@ -17,10 +17,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 
-/**
- * Catálogo (API del grupo o TMDB): Populares, En cartelera, Próximamente y Búsqueda.
- * Cada sección se pide en segundo plano y se puede pasar de página.
- */
 public class CarteleraControlador extends ControladorBase {
     private enum Seccion { POPULARES, EN_CARTELERA, PROXIMAMENTE, BUSQUEDA }
 
@@ -61,7 +57,6 @@ public class CarteleraControlador extends ControladorBase {
         cargar(1);
     }
 
-    // setSelected(true): si el usuario vuelve a dar clic en la sección activa, que no se "apague"
     @FXML private void verPopulares() { tglPopulares.setSelected(true); cambiarSeccion(Seccion.POPULARES); }
     @FXML private void verCartelera() { tglCartelera.setSelected(true); cambiarSeccion(Seccion.EN_CARTELERA); }
     @FXML private void verProximamente() { tglProximamente.setSelected(true); cambiarSeccion(Seccion.PROXIMAMENTE); }
@@ -87,7 +82,6 @@ public class CarteleraControlador extends ControladorBase {
         cargar(1);
     }
 
-    /** Pide la página al catálogo en segundo plano para que la ventana no se congele. */
     private void cargar(int pagina) {
         progreso.setVisible(true);
         lblMensaje.setText("Cargando películas...");
@@ -116,7 +110,6 @@ public class CarteleraControlador extends ControladorBase {
         });
     }
 
-    /** Dibuja las tarjetas de la página actual aplicando el filtro de género (IFiltroPelicula). */
     private void mostrarPeliculas() {
         if (_paginaActual == null) {
             return;
@@ -147,13 +140,12 @@ public class CarteleraControlador extends ControladorBase {
         btnSiguiente.setDisable(!_paginaActual.tieneSiguiente());
     }
 
-    /** Catálogo de géneros: de la API al ComboBox y a la tabla "generos" de MySQL. */
     private void cargarGeneros() {
         enSegundoPlano(() -> ctx.catalogo().generos(), generos -> {
             cmbGenero.getItems().setAll(TODOS);
             cmbGenero.getItems().addAll(generos);
             cmbGenero.setValue(TODOS);
-            // la API del grupo no manda géneros en las listas: sin géneros no hay nada que filtrar
+
             cmbGenero.setDisable(generos.isEmpty());
             if (generos.isEmpty()) {
                 cmbGenero.setTooltip(new javafx.scene.control.Tooltip("La API no manda los géneros en esta lista."));
@@ -165,11 +157,9 @@ public class CarteleraControlador extends ControladorBase {
                 lblMensaje.setText("Aviso: no se pudieron guardar los géneros en MySQL. " + e.getMessage());
             }
         }, error -> {
-            // sin API usamos los géneros guardados en la base
             try {
                 cmbGenero.getItems().addAll(ctx.peliculas().listarGeneros());
             } catch (RuntimeException ignorada) {
-                // la falta de base de datos ya se avisa en otras pantallas
             }
         });
     }

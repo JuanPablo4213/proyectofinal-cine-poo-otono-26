@@ -2,10 +2,6 @@ package cinemex.modelo.usuarios;
 
 import cinemex.base.Seguridad;
 
-/**
- * Clase abstracta: nadie es "un usuario" a secas, es Cliente o Administrador.
- * Los atributos son protected para que las subclases los usen directo.
- */
 public abstract class POJOUsuario {
     protected int id;
     protected String nombre;
@@ -21,10 +17,8 @@ public abstract class POJOUsuario {
         this.sal = sal;
     }
 
-    /** Cada subclase dice qué rol tiene (polimorfismo). */
     public abstract String getRol();
 
-    /** Compara la contraseña escrita contra el hash guardado. */
     public boolean validarPassword(String password) {
         return password != null && Seguridad.hash(sal, password).equals(passwordHash);
     }

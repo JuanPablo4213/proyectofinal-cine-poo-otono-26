@@ -10,10 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-/**
- * Cambia la pantalla que se ve en el centro de la ventana. Carga el FXML (Vista),
- * le pasa el Contexto a su controlador y guarda un historial para el botón "Regresar".
- */
 public class Navegador {
     private static final String RUTA_VISTAS = "/cinemex/vista/";
 
@@ -28,7 +24,6 @@ public class Navegador {
         ctx.setNavegador(this);
     }
 
-    /** Abre la ventana principal y muestra la cartelera. */
     public void iniciar() {
         FXMLLoader loader = cargador("principal");
         Parent raiz = cargar(loader);
@@ -50,12 +45,10 @@ public class Navegador {
         ir("cartelera");
     }
 
-    /** Muestra la vista indicada (ej. "cartelera" carga /cinemex/vista/cartelera.fxml). */
     public <T extends ControladorBase> T ir(String vista) {
         return ir(vista, c -> { });
     }
 
-    /** Igual, pero deja configurar el controlador (ej. qué película mostrar) antes de iniciar. */
     public <T extends ControladorBase> T ir(String vista, Consumer<T> preparar) {
         FXMLLoader loader = cargador(vista);
         Parent nodo = cargar(loader);
@@ -71,7 +64,6 @@ public class Navegador {
         return controlador;
     }
 
-    /** Regresa a la pantalla anterior tal como estaba (misma página, mismos filtros). */
     public void regresar() {
         if (_historial.isEmpty()) {
             ir("cartelera");
@@ -80,7 +72,6 @@ public class Navegador {
         }
     }
 
-    /** Si no hay sesión manda al login y, al entrar, ejecuta la acción pendiente. */
     public void requiereSesion(Runnable accion) {
         if (_ctx.usuarios().getUsuarioActual() != null) {
             accion.run();
@@ -89,7 +80,6 @@ public class Navegador {
         }
     }
 
-    /** Actualiza la barra de arriba (nombre del usuario, menú de administración). */
     public void actualizarBarra() {
         _principal.actualizarSesion();
     }

@@ -11,10 +11,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-/**
- * Detalle de una película (GET /{id} del catálogo). Si el administrador la importa, se guarda
- * en MySQL y ya se le pueden programar funciones; el cliente ve aquí las funciones y compra.
- */
 public class DetalleControlador extends ControladorBase {
     @FXML private StackPane contPoster;
     @FXML private Label lblTitulo;
@@ -29,8 +25,8 @@ public class DetalleControlador extends ControladorBase {
     @FXML private ProgressIndicator progreso;
 
     private int _tmdbId;
-    private POJOPelicula _peliculaTMDB;   // lo que regresó el catálogo (API)
-    private POJOPelicula _peliculaLocal;  // la de MySQL, si ya está importada
+    private POJOPelicula _peliculaTMDB;
+    private POJOPelicula _peliculaLocal;
 
     public void setTmdbId(int tmdbId) {
         this._tmdbId = tmdbId;
@@ -60,7 +56,7 @@ public class DetalleControlador extends ControladorBase {
             lblEstado.setText("Sin conexión a MySQL: " + e.getMessage());
         }
         if (_peliculaLocal != null) {
-            mostrar(_peliculaLocal);   // se ve algo de inmediato mientras responde la API
+            mostrar(_peliculaLocal);
         }
         progreso.setVisible(true);
         enSegundoPlano(() -> ctx.catalogo().detalle(_tmdbId), p -> {
@@ -100,7 +96,6 @@ public class DetalleControlador extends ControladorBase {
         lblSinopsis.setText(p.getSinopsis() == null || p.getSinopsis().isBlank() ? "Sin sinopsis en español." : p.getSinopsis());
     }
 
-    /** Botón de importar (solo admin) y funciones de mi cine. */
     private void actualizarEstado() {
         boolean admin = ctx.usuarios().esAdministrador();
         boolean importada = _peliculaLocal != null;

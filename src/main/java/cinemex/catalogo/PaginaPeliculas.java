@@ -3,7 +3,6 @@ package cinemex.catalogo;
 import cinemex.modelo.peliculas.POJOPelicula;
 import java.util.List;
 
-/** Una página de resultados ya convertida a objetos del modelo. */
 public class PaginaPeliculas {
     private final int _pagina;
     private final int _totalPaginas;
@@ -12,7 +11,7 @@ public class PaginaPeliculas {
 
     public PaginaPeliculas(int pagina, int totalPaginas, int totalResultados, List<POJOPelicula> peliculas) {
         this._pagina = pagina;
-        // TMDB no deja pedir más allá de la página 500
+
         this._totalPaginas = Math.min(totalPaginas, 500);
         this._totalResultados = totalResultados;
         this._peliculas = peliculas;

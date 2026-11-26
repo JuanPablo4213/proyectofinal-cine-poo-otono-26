@@ -3,10 +3,6 @@ package cinemex.modelo.compras;
 import cinemex.modelo.cines.POJOAsiento;
 import cinemex.modelo.funciones.POJOFuncion;
 
-/**
- * Un boleto. Guarda el precio como "foto": si mañana sube el precio de la sala,
- * el boleto ya comprado sigue costando lo que se pagó.
- */
 public class POJOBoleto {
     private int _id;
     private POJOFuncion _funcion;

@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.StackPane;
 
-/** La ventana principal: barra de navegación arriba y la pantalla actual en el centro. */
 public class PrincipalControlador extends ControladorBase {
     @FXML private StackPane contenido;
     @FXML private Label lblUsuario;
@@ -22,7 +21,6 @@ public class PrincipalControlador extends ControladorBase {
         actualizarSesion();
     }
 
-    /** Muestra el nombre del usuario y el menú de administración solo si es admin (RN10). */
     public void actualizarSesion() {
         POJOUsuario u = ctx.usuarios().getUsuarioActual();
         boolean admin = ctx.usuarios().esAdministrador();

@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-/** Iniciar sesión y crear cuenta de cliente. */
 public class LoginControlador extends ControladorBase {
     @FXML private TextField txtEmail;
     @FXML private PasswordField txtPassword;
@@ -20,7 +19,6 @@ public class LoginControlador extends ControladorBase {
 
     private Runnable _alEntrar;
 
-    /** Lo que se hace después de entrar (por ejemplo, volver a la compra). */
     public void setAlEntrar(Runnable accion) {
         this._alEntrar = accion;
     }

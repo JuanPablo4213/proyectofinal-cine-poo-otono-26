@@ -1,6 +1,5 @@
 package cinemex.modelo.usuarios;
 
-/** Administrador: da de alta películas, cines, salas y funciones (RN10). */
 public class POJOAdministrador extends POJOUsuario {
     private String _numEmpleado;
 

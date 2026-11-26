@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-/** Créditos y atribución obligatoria de TMDB. */
 public class AcercaDeControlador extends ControladorBase {
     @FXML private ImageView imgTmdb;
 

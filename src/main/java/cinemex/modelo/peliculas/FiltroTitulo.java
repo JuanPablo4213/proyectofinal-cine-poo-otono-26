@@ -1,6 +1,5 @@
 package cinemex.modelo.peliculas;
 
-/** Pasa si el título contiene el texto (sin importar mayúsculas). */
 public class FiltroTitulo implements IFiltroPelicula {
     private String _texto;
 

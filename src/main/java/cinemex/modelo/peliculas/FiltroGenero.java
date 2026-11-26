@@ -1,6 +1,5 @@
 package cinemex.modelo.peliculas;
 
-/** Pasa si la película tiene ese género. */
 public class FiltroGenero implements IFiltroPelicula {
     private POJOGenero _genero;
 

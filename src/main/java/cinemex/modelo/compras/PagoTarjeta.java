@@ -1,6 +1,5 @@
 package cinemex.modelo.compras;
 
-/** Pago simulado con tarjeta: 16 dígitos y CVV de 3. Sin comisión. */
 public class PagoTarjeta implements IMetodoPago {
     private String _numeroTarjeta;
     private String _cvv;
@@ -28,6 +27,6 @@ public class PagoTarjeta implements IMetodoPago {
     @Override
     public String getReferencia() {
         String ultimos = _numeroTarjeta.length() >= 4 ? _numeroTarjeta.substring(_numeroTarjeta.length() - 4) : "";
-        return "**** " + ultimos;   // nunca se guarda el número completo
+        return "**** " + ultimos;
     }
 }

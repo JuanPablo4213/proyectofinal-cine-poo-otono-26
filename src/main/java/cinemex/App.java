@@ -15,13 +15,7 @@ import cinemex.tmdb.ClienteTMDB;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-/**
- * Punto de entrada. Igual que en el diseño: App crea los Servicios UNA sola vez
- * y se los pasa a todas las pantallas (por medio del Contexto), para que todas
- * compartan los mismos datos y la misma sesión.
- */
 public class App extends Application {
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -34,7 +28,6 @@ public class App extends Application {
         ServicioFunciones funciones = new ServicioFunciones(peliculas, cines);
         ServicioCompras compras = new ServicioCompras(funciones);
 
-        // Fuente del catálogo: la API del grupo (por defecto) o TMDB directo (peliculas.fuente=tmdb)
         IClientePeliculas catalogo = "tmdb".equalsIgnoreCase(Config.get("peliculas.fuente"))
                 ? ClienteTMDB.desdeConfig()
                 : ClienteCinemexAPI.desdeConfig();

@@ -1,6 +1,5 @@
 package cinemex.modelo.peliculas;
 
-/** Pasa si la película tiene exactamente esa clasificación. */
 public class FiltroClasificacion implements IFiltroPelicula {
     private Clasificacion _clasificacion;
 

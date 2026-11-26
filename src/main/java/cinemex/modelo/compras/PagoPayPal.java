@@ -1,6 +1,5 @@
 package cinemex.modelo.compras;
 
-/** Pago simulado con PayPal: valida el correo. Comisión del 3.5%. */
 public class PagoPayPal implements IMetodoPago {
     private static final double COMISION = 0.035;
     private String _correo;

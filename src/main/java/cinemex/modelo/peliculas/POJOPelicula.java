@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Una película. Puede venir de TMDB (id = 0, todavía no está en mi cine)
- * o de MySQL (id > 0, ya fue importada y se le pueden programar funciones).
- */
 public class POJOPelicula {
     public static final String URL_POSTER = "https://image.tmdb.org/t/p/w500";
 
@@ -38,15 +34,10 @@ public class POJOPelicula {
         this._generos = new ArrayList<>();
     }
 
-    /** true si ya está guardada en MySQL. */
     public boolean estaImportada() {
         return _id > 0;
     }
 
-    /**
-     * URL completa del póster, o null si no tiene. La API del grupo ya manda la URL completa;
-     * TMDB manda solo el poster_path ("/abc.jpg") y hay que ponerle la base.
-     */
     public String getUrlPoster() {
         if (_posterPath == null || _posterPath.isBlank()) {
             return null;

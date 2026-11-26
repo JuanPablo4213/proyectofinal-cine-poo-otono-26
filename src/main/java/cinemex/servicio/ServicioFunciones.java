@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Horarios: qué película se proyecta en qué sala y cuándo. */
 public class ServicioFunciones extends BaseServicio {
     private static final DateTimeFormatter HORA = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -32,10 +31,6 @@ public class ServicioFunciones extends BaseServicio {
         this._cines = cines;
     }
 
-    /**
-     * Nueva (id = 0) o actualizar (id > 0). Reglas:
-     * RN02 película + sala + fecha; RN03 no se empalma con otra función de la misma sala.
-     */
     public boolean guardar(POJOFuncion obj) {
         if (obj.getPelicula() == null || !obj.getPelicula().estaImportada()) {
             throw new ExcepcionCine("Elige una película de tu cartelera.");
@@ -76,7 +71,6 @@ public class ServicioFunciones extends BaseServicio {
         }
     }
 
-    /** Solo se puede borrar una función sin boletos vendidos. */
     public boolean eliminar(int id) {
         if (contarBoletos(id) > 0) {
             throw new ExcepcionCine("No se puede eliminar: la función ya tiene boletos vendidos.");
@@ -89,7 +83,6 @@ public class ServicioFunciones extends BaseServicio {
         }
     }
 
-    /** La función con los asientos reales de su sala y cuáles ya están vendidos (para el mapa). */
     public POJOFuncion buscarPorId(int id) {
         List<POJOFuncion> r = consultar("SELECT * FROM funciones WHERE id = ?", id);
         if (r.isEmpty()) {
@@ -101,18 +94,15 @@ public class ServicioFunciones extends BaseServicio {
         return f;
     }
 
-    /** Todas, las más recientes primero (pantalla de administración). */
     public List<POJOFuncion> listar() {
         return consultar("SELECT * FROM funciones ORDER BY fecha_hora DESC");
     }
 
-    /** Funciones futuras de una película. */
     public List<POJOFuncion> listarPorPelicula(POJOPelicula p) {
         return consultar("SELECT * FROM funciones WHERE pelicula_id = ? AND fecha_hora > NOW() ORDER BY fecha_hora",
                 p.getId());
     }
 
-    /** Funciones de una película en un cine y día, ordenadas por hora. */
     public List<POJOFuncion> listarPorCineYPelicula(POJOCine c, POJOPelicula p, LocalDate dia) {
         List<POJOFuncion> resultado = new ArrayList<>();
         for (POJOFuncion f : listarPorCineYDia(c, dia)) {
@@ -123,7 +113,6 @@ public class ServicioFunciones extends BaseServicio {
         return resultado;
     }
 
-    /** Todo lo que se proyecta en un cine ese día (pantalla "Mi cine"). */
     public List<POJOFuncion> listarPorCineYDia(POJOCine c, LocalDate dia) {
         List<POJOFuncion> resultado = new ArrayList<>();
         String sql = "SELECT * FROM funciones WHERE fecha_hora >= ? AND fecha_hora < ? AND fecha_hora > NOW() "
@@ -137,7 +126,6 @@ public class ServicioFunciones extends BaseServicio {
         return resultado;
     }
 
-    /** Asientos vendidos (boletos vigentes) de la función. */
     public void cargarOcupados(POJOFuncion f) {
         List<POJOAsiento> ocupados = new ArrayList<>();
         String sql = "SELECT a.id, a.fila, a.numero FROM boletos b JOIN asientos a ON a.id = b.asiento_id "
@@ -168,9 +156,6 @@ public class ServicioFunciones extends BaseServicio {
         }
     }
 
-    // ------------------------------------------------------------------ privados
-
-    /** RN03: dos funciones de la misma sala no pueden empalmarse (incluye 20 min de limpieza). */
     private void validarEmpalme(POJOFuncion nueva) {
         String sql = "SELECT * FROM funciones WHERE sala_id = ? AND id <> ? AND fecha_hora BETWEEN ? AND ?";
         List<POJOFuncion> cercanas = consultar(sql, nueva.getSala().getId(), nueva.getId(),
@@ -187,7 +172,6 @@ public class ServicioFunciones extends BaseServicio {
         }
     }
 
-    /** Arma las funciones con su película, cine y sala ya como objetos. */
     private List<POJOFuncion> consultar(String sql, Object... params) {
         Map<Integer, POJOPelicula> peliculas = new HashMap<>();
         for (POJOPelicula p : _peliculas.listar()) {

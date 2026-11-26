@@ -3,7 +3,6 @@ package cinemex.tmdb.dto;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-/** Fechas de estreno por país; de aquí sale la clasificación mexicana (AA, A, B, B15, C, D). */
 public class ReleaseDatesDTO {
     public List<Pais> results;
 

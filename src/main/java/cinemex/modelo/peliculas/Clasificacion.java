@@ -1,6 +1,5 @@
 package cinemex.modelo.peliculas;
 
-/** Clasificaciones oficiales en México. SC = sin clasificar (TMDB no siempre la trae). */
 public enum Clasificacion {
     AA("AA - Todo público, atractiva para niños"),
     A("A - Todo público"),
@@ -18,7 +17,6 @@ public enum Clasificacion {
 
     public String getDescripcion() { return _descripcion; }
 
-    /** Convierte la certificación que manda TMDB ("B-15", "B15", "AA"...) al enum. */
     public static Clasificacion desdeTexto(String texto) {
         if (texto == null || texto.isBlank()) {
             return SC;

@@ -29,21 +29,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Cliente de la API de películas del grupo (aprobada por el profesor), que a su vez
- * obtiene los datos de TMDB. Endpoints: /populares, /cartelera, /proximos-estrenos y /{id}.
- *
- * La API no tiene búsqueda ni lista de géneros, así que:
- *  - buscar() junta las películas de las tres listas y las filtra con FiltroTitulo (del diseño);
- *  - generos() arma el catálogo con los géneros que traen las películas.
- */
 public class ClienteCinemexAPI implements IClientePeliculas {
     public static final String URL_DEFAULT =
             "https://cinemex-api-bye8gdg4chbsa7e3.northcentralus-01.azurewebsites.net/api/peliculas";
-    private static final int PAGINAS_PARA_BUSCAR = 2;   // por cada lista
+    private static final int PAGINAS_PARA_BUSCAR = 2;
     private static final int RESULTADOS_POR_PAGINA = 20;
 
-    /** Ids de TMDB de los géneros en español, para que coincidan con la tabla "generos" de MySQL. */
     private static final Map<String, Integer> IDS_GENERO = Map.ofEntries(
             Map.entry("accion", 28), Map.entry("aventura", 12), Map.entry("animacion", 16),
             Map.entry("comedia", 35), Map.entry("crimen", 80), Map.entry("documental", 99),
@@ -55,7 +46,7 @@ public class ClienteCinemexAPI implements IClientePeliculas {
 
     private final String _urlBase;
     private final HttpClient _http;
-    private final Gson _gson = new Gson();   // los campos del JSON ya vienen en camelCase
+    private final Gson _gson = new Gson();
 
     public ClienteCinemexAPI(String urlBase) {
         String url = (urlBase == null || urlBase.isBlank()) ? URL_DEFAULT : urlBase.trim();
@@ -66,7 +57,6 @@ public class ClienteCinemexAPI implements IClientePeliculas {
                 .build();
     }
 
-    /** Lee api.url de config.properties (si no está, usa la URL del grupo). */
     public static ClienteCinemexAPI desdeConfig() {
         return new ClienteCinemexAPI(Config.get("api.url"));
     }
@@ -75,8 +65,6 @@ public class ClienteCinemexAPI implements IClientePeliculas {
     public String getNombre() {
         return "API Cinemex";
     }
-
-    // ------------------------------------------------------- endpoints
 
     @Override
     public PaginaPeliculas populares(int pagina) {
@@ -98,7 +86,6 @@ public class ClienteCinemexAPI implements IClientePeliculas {
         return aPelicula(leer(get("/" + id), PeliculaApiDTO.class));
     }
 
-    /** Busca por título entre populares, cartelera y próximos estrenos; pagina el resultado aquí. */
     @Override
     public PaginaPeliculas buscar(String texto, int pagina) {
         if (texto == null || texto.isBlank()) {
@@ -118,7 +105,6 @@ public class ClienteCinemexAPI implements IClientePeliculas {
         return new PaginaPeliculas(p, totalPaginas, encontradas.size(), new ArrayList<>(encontradas.subList(desde, hasta)));
     }
 
-    /** Catálogo de géneros armado con los géneros de las películas de las tres listas. */
     @Override
     public List<POJOGenero> generos() {
         Map<Integer, POJOGenero> unicos = new LinkedHashMap<>();
@@ -131,8 +117,6 @@ public class ClienteCinemexAPI implements IClientePeliculas {
         lista.sort(Comparator.comparing(POJOGenero::getNombre));
         return lista;
     }
-
-    // ------------------------------------------------------- conversión JSON -> modelo
 
     PaginaPeliculas convertirPagina(String json) {
         PaginaApiDTO dto = leer(json, PaginaApiDTO.class);
@@ -162,7 +146,6 @@ public class ClienteCinemexAPI implements IClientePeliculas {
         return p;
     }
 
-    /** Mismo id que TMDB si lo reconocemos; si no, un id estable a partir del nombre. */
     static int idGenero(String nombre) {
         String clave = Normalizer.normalize(nombre.trim().toLowerCase(), Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", "");
@@ -175,13 +158,11 @@ public class ClienteCinemexAPI implements IClientePeliculas {
             return null;
         }
         try {
-            return LocalDate.parse(texto.substring(0, 10));   // "2024-02-29" o "2024-02-29T00:00:00"
+            return LocalDate.parse(texto.substring(0, 10));
         } catch (DateTimeParseException e) {
             return null;
         }
     }
-
-    // ------------------------------------------------------- ayudantes
 
     private List<POJOPelicula> todasLasListas() {
         Map<Integer, POJOPelicula> unicas = new LinkedHashMap<>();
@@ -207,10 +188,9 @@ public class ClienteCinemexAPI implements IClientePeliculas {
         }
     }
 
-    /** GET a la API; traduce los errores a mensajes entendibles. */
     private String get(String ruta) {
         HttpRequest peticion = HttpRequest.newBuilder(URI.create(_urlBase + ruta))
-                .timeout(Duration.ofSeconds(30))   // Azure puede tardar en "despertar"
+                .timeout(Duration.ofSeconds(30))
                 .header("Accept", "application/json")
                 .GET()
                 .build();

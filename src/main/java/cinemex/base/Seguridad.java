@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.HexFormat;
 
-/** Hash de contraseñas con SHA-256 + sal (RNF02: nunca se guardan en texto plano). */
 public final class Seguridad {
     private static final SecureRandom RANDOM = new SecureRandom();
 

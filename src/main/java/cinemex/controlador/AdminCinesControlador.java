@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-/** CRUD de cines y de las salas de cada cine. */
 public class AdminCinesControlador extends ControladorBase {
     @FXML private TableView<POJOCine> tablaCines;
     @FXML private TextField txtNombre;
@@ -52,7 +51,6 @@ public class AdminCinesControlador extends ControladorBase {
         cargar(0);
     }
 
-    /** Recarga la tabla y vuelve a seleccionar el cine con ese id. */
     private void cargar(int idSeleccionar) {
         try {
             tablaCines.getItems().setAll(ctx.cines().listar());
@@ -86,7 +84,6 @@ public class AdminCinesControlador extends ControladorBase {
         txtNombre.requestFocus();
     }
 
-    /** Si hay un cine seleccionado lo actualiza; si no, crea uno nuevo. */
     @FXML
     private void guardarCine() {
         POJOCine sel = tablaCines.getSelectionModel().getSelectedItem();

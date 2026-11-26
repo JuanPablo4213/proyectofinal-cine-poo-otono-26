@@ -8,14 +8,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-/** Construye las piezas visuales repetidas: tarjeta de película y póster. */
 public final class Tarjetas {
     public static final double ANCHO = 170;
     public static final double ALTO = 255;
 
     private Tarjetas() { }
 
-    /** Póster de TMDB; la imagen se descarga en segundo plano (último parámetro = true). */
     public static StackPane poster(POJOPelicula p, double ancho, double alto) {
         StackPane caja = new StackPane();
         caja.setPrefSize(ancho, alto);
@@ -35,7 +33,6 @@ public final class Tarjetas {
         return caja;
     }
 
-    /** Tarjeta: póster + título + año y calificación. */
     public static VBox tarjeta(POJOPelicula p, Runnable alDarClic) {
         Label titulo = new Label(p.getTitulo());
         titulo.setWrapText(true);

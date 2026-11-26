@@ -16,7 +16,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-/** CRUD de funciones: programar qué película va en qué sala y a qué hora. */
 public class AdminFuncionesControlador extends ControladorBase {
     @FXML private TableView<POJOFuncion> tabla;
     @FXML private ComboBox<POJOPelicula> cmbPelicula;
@@ -65,7 +64,6 @@ public class AdminFuncionesControlador extends ControladorBase {
         tabla.getItems().setAll(ctx.funciones().listar());
     }
 
-    /** Al elegir una fila, el formulario se llena para poder editarla. */
     private void seleccionar(POJOFuncion f) {
         if (f == null) {
             return;

@@ -12,11 +12,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Registro, inicio de sesión y la sesión actual (_usuarioActual). */
 public class ServicioUsuarios extends BaseServicio {
     private POJOUsuario _usuarioActual;
 
-    /** Guarda un usuario nuevo. Rechaza correos repetidos (RN09). */
     public boolean guardar(POJOUsuario obj) {
         requerido(obj.getNombre(), "Nombre");
         String email = requerido(obj.getEmail(), "Correo").toLowerCase();
@@ -49,7 +47,6 @@ public class ServicioUsuarios extends BaseServicio {
         }
     }
 
-    /** Crea un cliente con su contraseña ya convertida en hash y lo guarda. */
     public POJOCliente registrarCliente(String nombre, String email, String telefono, String password) {
         if (password == null || password.length() < 6) {
             throw new ExcepcionCine("La contraseña debe tener al menos 6 caracteres.");
@@ -82,7 +79,6 @@ public class ServicioUsuarios extends BaseServicio {
         return lista;
     }
 
-    /** Si el correo y la contraseña coinciden guarda la sesión y regresa al usuario; si no, null. */
     public POJOUsuario iniciarSesion(String email, String password) {
         POJOUsuario u = buscarPorEmail(email);
         if (u != null && u.validarPassword(password)) {
@@ -100,7 +96,6 @@ public class ServicioUsuarios extends BaseServicio {
         return _usuarioActual;
     }
 
-    /** El usuario conectado si es cliente; null si no hay sesión o es administrador. */
     public POJOCliente getClienteActual() {
         return _usuarioActual instanceof POJOCliente c ? c : null;
     }
@@ -120,7 +115,6 @@ public class ServicioUsuarios extends BaseServicio {
         }
     }
 
-    /** Fila de MySQL -> subclase correcta según la columna "rol". */
     private POJOUsuario mapear(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String nombre = rs.getString("nombre");

@@ -3,7 +3,6 @@ package cinemex.modelo.cines;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Un complejo de cine. Se compone de salas. */
 public class POJOCine {
     private int _id;
     private String _nombre;
@@ -19,7 +18,6 @@ public class POJOCine {
         this._salas = new ArrayList<>();
     }
 
-    /** Agrega la sala si no hay otra con el mismo número. */
     public boolean agregarSala(POJOSala s) {
         for (POJOSala existente : _salas) {
             if (existente.getNumero() == s.getNumero()) {
@@ -30,7 +28,6 @@ public class POJOCine {
         return true;
     }
 
-    /** true si la sala pertenece a este cine. */
     public boolean tieneSala(POJOSala s) {
         return s != null && s.getCineId() == _id;
     }

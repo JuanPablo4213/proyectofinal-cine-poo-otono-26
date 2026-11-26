@@ -7,7 +7,6 @@ import cinemex.servicio.ServicioPeliculas;
 import cinemex.servicio.ServicioUsuarios;
 import cinemex.catalogo.IClientePeliculas;
 
-/** Lo que comparten todas las pantallas: los Servicios (Modelo), el catálogo de películas y el Navegador. */
 public class Contexto {
     private final ServicioUsuarios _usuarios;
     private final ServicioPeliculas _peliculas;
@@ -32,7 +31,7 @@ public class Contexto {
     public ServicioCines cines() { return _cines; }
     public ServicioFunciones funciones() { return _funciones; }
     public ServicioCompras compras() { return _compras; }
-    /** API Cinemex o TMDB, según config.properties: las pantallas no saben cuál es. */
+
     public IClientePeliculas catalogo() { return _catalogo; }
     public Navegador navegador() { return _navegador; }
 

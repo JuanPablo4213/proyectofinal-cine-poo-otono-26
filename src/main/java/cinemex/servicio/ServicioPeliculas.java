@@ -16,16 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * La cartelera de MI cine: películas importadas de TMDB a MySQL.
- * TMDB es el catálogo; esta tabla es lo que el cine sí proyecta.
- */
 public class ServicioPeliculas extends BaseServicio {
-
-    /**
-     * Importa (o actualiza) una película de TMDB. Como tmdb_id es único,
-     * si ya existía se actualizan sus datos en lugar de duplicarla.
-     */
     public boolean guardar(POJOPelicula obj) {
         if (obj == null || obj.getTmdbId() <= 0) {
             throw new ExcepcionCine("La película no tiene id de TMDB.");
@@ -39,7 +30,7 @@ public class ServicioPeliculas extends BaseServicio {
                 insertar(c, obj);
             } else {
                 obj.setId(existente.getId());
-                // si TMDB no trae clasificación, se respeta la que puso el administrador
+
                 if (obj.getClasificacion() == Clasificacion.SC) {
                     obj.setClasificacion(existente.getClasificacion());
                 }
@@ -57,7 +48,6 @@ public class ServicioPeliculas extends BaseServicio {
         }
     }
 
-    /** Cambios que hace el administrador: clasificación y si está en cartelera. */
     public boolean actualizar(POJOPelicula obj) {
         String sql = "UPDATE peliculas SET clasificacion = ?, en_cartelera = ? WHERE id = ?";
         try (PreparedStatement ps = con().prepareStatement(sql)) {
@@ -70,7 +60,6 @@ public class ServicioPeliculas extends BaseServicio {
         }
     }
 
-    /** Solo se puede borrar si no tiene funciones (la llave foránea lo impide). */
     public boolean eliminar(int id) {
         try (PreparedStatement ps = con().prepareStatement("DELETE FROM peliculas WHERE id = ?")) {
             ps.setInt(1, id);
@@ -102,7 +91,6 @@ public class ServicioPeliculas extends BaseServicio {
         return consultar("SELECT * FROM peliculas WHERE en_cartelera = TRUE ORDER BY titulo");
     }
 
-    /** Películas en cartelera que cumplen TODOS los filtros. */
     public List<POJOPelicula> buscar(List<IFiltroPelicula> filtros) {
         List<POJOPelicula> resultado = new ArrayList<>();
         for (POJOPelicula p : listarCartelera()) {
@@ -113,7 +101,6 @@ public class ServicioPeliculas extends BaseServicio {
         return resultado;
     }
 
-    /** Guarda/actualiza el catálogo de géneros que manda TMDB (/3/genre/movie/list). */
     public void sincronizarGeneros(List<POJOGenero> generos) {
         String sql = "INSERT INTO generos (id, nombre) VALUES (?, ?) ON DUPLICATE KEY UPDATE nombre = VALUES(nombre)";
         try (PreparedStatement ps = con().prepareStatement(sql)) {
@@ -140,8 +127,6 @@ public class ServicioPeliculas extends BaseServicio {
         }
         return lista;
     }
-
-    // ------------------------------------------------------------------ privados
 
     private void insertar(Connection c, POJOPelicula p) throws SQLException {
         String sql = "INSERT INTO peliculas (tmdb_id, titulo, sinopsis, duracion_min, clasificacion, poster_path, "
@@ -180,7 +165,6 @@ public class ServicioPeliculas extends BaseServicio {
         }
     }
 
-    /** Reemplaza los géneros de la película (y da de alta los que no existan). */
     private void guardarGeneros(Connection c, POJOPelicula p) throws SQLException {
         try (PreparedStatement borrar = c.prepareStatement("DELETE FROM pelicula_genero WHERE pelicula_id = ?")) {
             borrar.setInt(1, p.getId());
@@ -201,7 +185,6 @@ public class ServicioPeliculas extends BaseServicio {
         }
     }
 
-    /** Ejecuta la consulta y le pone sus géneros a cada película. */
     private List<POJOPelicula> consultar(String sql, Object... params) {
         List<POJOPelicula> lista = new ArrayList<>();
         Map<Integer, POJOPelicula> porId = new HashMap<>();

@@ -8,12 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Una función = película + sala + fecha y hora (RN02). Aquí vive la lista de
- * asientos ya vendidos: la silla F7 puede estar libre a las 4 pm y ocupada a las 7 pm.
- */
 public class POJOFuncion {
-    /** Minutos de limpieza entre una función y la siguiente en la misma sala (RN03). */
     public static final int MINUTOS_LIMPIEZA = 20;
 
     private int _id;
@@ -35,12 +30,10 @@ public class POJOFuncion {
         this._asientosOcupados = new ArrayList<>();
     }
 
-    /** El asiento existe en la sala y no está vendido. */
     public boolean estaDisponible(POJOAsiento a) {
         return a != null && _sala.getAsientos().contains(a) && !_asientosOcupados.contains(a);
     }
 
-    /** Marca el asiento como vendido. false si ya estaba ocupado. */
     public boolean ocupar(POJOAsiento a) {
         if (!estaDisponible(a)) {
             return false;
@@ -49,7 +42,6 @@ public class POJOFuncion {
         return true;
     }
 
-    /** Libera el asiento (al cancelar una compra, RN08). */
     public void liberar(POJOAsiento a) {
         _asientosOcupados.remove(a);
     }
@@ -64,7 +56,6 @@ public class POJOFuncion {
         return libres;
     }
 
-    /** Hora en que la sala vuelve a estar libre: inicio + duración + limpieza. */
     public LocalDateTime calcularHoraFin() {
         return _fechaHora.plusMinutes(_pelicula.getDuracionMin() + MINUTOS_LIMPIEZA);
     }

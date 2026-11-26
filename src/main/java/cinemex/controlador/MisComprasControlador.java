@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 
-/** Historial del cliente y cancelación (RN08). */
 public class MisComprasControlador extends ControladorBase {
     @FXML private TableView<POJOCompra> tabla;
     @FXML private Label lblMensaje;

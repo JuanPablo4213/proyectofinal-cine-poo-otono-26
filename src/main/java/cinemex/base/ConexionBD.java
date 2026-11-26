@@ -4,16 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Una sola conexión a MySQL compartida por todo el programa (como en el diagrama de clases).
- * Los Servicios la piden con ConexionBD.obtener() y usan PreparedStatement (RNF02).
- */
 public class ConexionBD {
     private static Connection conexion;
 
     private ConexionBD() { }
 
-    /** Abre la conexión si no existe o se cerró, y la regresa. */
     public static Connection obtener() {
         try {
             if (conexion == null || conexion.isClosed() || !conexion.isValid(2)) {
@@ -29,14 +24,12 @@ public class ConexionBD {
         }
     }
 
-    /** Se llama al cerrar la aplicación. */
     public static void cerrar() {
         try {
             if (conexion != null && !conexion.isClosed()) {
                 conexion.close();
             }
         } catch (SQLException ignorada) {
-            // al salir no importa
         }
     }
 }
