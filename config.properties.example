@@ -10,7 +10,7 @@ db.password=cambia_esta_contrasena
 # "api" = API de películas del grupo (aprobada por el profesor, no necesita llave)
 # "tmdb" = directo a themoviedb.org (necesita tmdb.token o tmdb.apiKey)
 peliculas.fuente=api
-api.url=https://api-cinemex-akd3btgfhsgnf5d5.northcentralus-01.azurewebsites.net/api/peliculas
+api.url=https://cinemex-api-bye8gdg4chbsa7e3.northcentralus-01.azurewebsites.net/api/peliculas
 
 # Solo si peliculas.fuente=tmdb
 tmdb.token=

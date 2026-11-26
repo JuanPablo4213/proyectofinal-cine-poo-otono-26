@@ -24,7 +24,7 @@ Con la app puedes:
 | Construcción | Maven (`pom.xml`) |
 | Interfaz gráfica | JavaFX 21 (vistas FXML + CSS) |
 | Base de datos | MySQL 8.4 en Docker (`docker-compose.yml`) |
-| Catálogo | [API de películas del grupo](https://api-cinemex-akd3btgfhsgnf5d5.northcentralus-01.azurewebsites.net/api/peliculas/swagger) (datos de TMDB) con `java.net.http.HttpClient` y Gson. Alternativa: TMDB directo |
+| Catálogo | [API de películas del grupo](https://cinemex-api-bye8gdg4chbsa7e3.northcentralus-01.azurewebsites.net/api/peliculas/swagger) (datos de TMDB) con `java.net.http.HttpClient` y Gson. Alternativa: TMDB directo |
 
 ---
 
@@ -117,8 +117,8 @@ src/main/resources/cinemex/
 
 Con autorización del profesor, el catálogo se obtiene de la API de películas de mis compañeros, que expone datos de TMDB.
 
-- Base: `https://api-cinemex-akd3btgfhsgnf5d5.northcentralus-01.azurewebsites.net/api/peliculas`
-- Documentación: [Swagger](https://api-cinemex-akd3btgfhsgnf5d5.northcentralus-01.azurewebsites.net/api/peliculas/swagger)
+- Base: `https://cinemex-api-bye8gdg4chbsa7e3.northcentralus-01.azurewebsites.net/api/peliculas`
+- Documentación: [Swagger](https://cinemex-api-bye8gdg4chbsa7e3.northcentralus-01.azurewebsites.net/api/peliculas/swagger)
 
 | Funcionalidad | Endpoint | Dónde se usa |
 | --- | --- | --- |

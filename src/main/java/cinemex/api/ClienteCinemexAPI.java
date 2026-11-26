@@ -39,7 +39,7 @@ import java.util.Map;
  */
 public class ClienteCinemexAPI implements IClientePeliculas {
     public static final String URL_DEFAULT =
-            "https://api-cinemex-akd3btgfhsgnf5d5.northcentralus-01.azurewebsites.net/api/peliculas";
+            "https://cinemex-api-bye8gdg4chbsa7e3.northcentralus-01.azurewebsites.net/api/peliculas";
     private static final int PAGINAS_PARA_BUSCAR = 2;   // por cada lista
     private static final int RESULTADOS_POR_PAGINA = 20;
 

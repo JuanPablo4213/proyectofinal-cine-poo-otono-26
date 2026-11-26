@@ -153,6 +153,12 @@ public class CarteleraControlador extends ControladorBase {
             cmbGenero.getItems().setAll(TODOS);
             cmbGenero.getItems().addAll(generos);
             cmbGenero.setValue(TODOS);
+            // la API del grupo no manda géneros en las listas: sin géneros no hay nada que filtrar
+            cmbGenero.setDisable(generos.isEmpty());
+            if (generos.isEmpty()) {
+                cmbGenero.setTooltip(new javafx.scene.control.Tooltip("La API no manda los géneros en esta lista."));
+                return;
+            }
             try {
                 ctx.peliculas().sincronizarGeneros(generos);
             } catch (RuntimeException e) {
